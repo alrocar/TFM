@@ -28,4 +28,4 @@ El objetivo de este trabajo final de máster consiste en el desarrollo de conect
 Palabras clave: *BASH, Docker, Vagrant, Location Intelligence, AWS, HDFS, Hadoop, BigQuery, Hive, Impala, Spark, NoSQL, Cassandra, MongoDB, CARTO, dashboards, análisis geoespacial*
 
 .. [#f1] https://www.carto.com
-.. [#f2] :ref:`location-intelligence`
+.. [#f2] :ref:`location-intelligence` Añadir directamente aquí la definición
