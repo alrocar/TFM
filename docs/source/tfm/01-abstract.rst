@@ -1,3 +1,8 @@
+3. Introducción: definición de los objetivos que se persiguen o del problema
+planteado, relevancia del tema y aportación que supone, presentación de la
+estructura del trabajo en la que se proporcione una visión de conjunto de la
+secuencia de capítulos.
+
 Resumen ejecutivo
 =================
 
