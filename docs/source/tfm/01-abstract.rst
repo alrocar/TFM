@@ -35,7 +35,7 @@ El objetivo de este trabajo final de máster consiste en el desarrollo de conect
 
 Estos conectores para **CARTO** permitirán a las organizaciones mantener sus actuales flujos de ingestión y procesamiento de información, además de aprovechar lo mejor de dos mundos: almacenamiento y procesamiento distribuido que ofrecen algunas de estas herramientas orientadas a Big Data y visualiación y análisis geoespacial de **CARTO**.
 
-Cabe destacar que los resultados de este trabajo no son de carácter teórico, sino que consiste en código fuente y herramientas que se incluirán en la distribución oficial de **CARTO**
+Cabe destacar que los resultados de este trabajo no son de carácter teórico, sino que consiste en código fuente y herramientas que se incluirán en la distribución *open source* de **CARTO**
 
 Organización de este trabajo final de máster
 --------------------------------------------

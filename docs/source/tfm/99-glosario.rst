@@ -22,3 +22,6 @@ Location Intelligence
 
 NoSQL
 -----
+
+Open source
+-----------
