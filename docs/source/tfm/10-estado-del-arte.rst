@@ -5,6 +5,12 @@ Estado del arte
 
 En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento big data para los que se van a realizar conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
 
+Conceptos previos
+-----------------
+
+- Procesamiento batch vs interactivo (Interactivo es batch pero con latencia del orden de segundos o minutos en caso de análisis de petabytes)
+- Driver ODBC
+
 CARTO
 -----
 
@@ -47,6 +53,7 @@ Como se puede observar de la lista, el ecosistema es muy amplio y como veremos a
 - Autenticación: Usuario y contraseña, HTTP/HTTPS, Kerberos/LDAP, OAuth, etc.
 - Tipo de licencia/propietario: Software libre (Apache, GPL, etc.), propietaria (Google, Amazon, Oracle, etc.)
 - Versión actual
+- Driver ODBC
 
 Para el motivo de este trabajo, no es necesario conocer otros detalles como mecanismos de replicación, particionamiento, tolerancia a fallos, etc. ya que el objetivo no consiste en administrar este tipo de sistemas.
 
@@ -59,7 +66,7 @@ Sin embargo, el objetivo es doble:
 Apache Hive
 ^^^^^^^^^^^
 
-Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop y otros sistemas compatibles como Amazon S3.
+Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop y otros sistemas compatibles como Amazon S3, originalmente desarrollado por Facebook.
 
 Ofrece un lenguaje de consulta basado en SQL llamado HiveQL que convierte las consultas en trabajos MapReduce, Tez o Spark.
 
@@ -72,46 +79,68 @@ Actualmente, como gran parte de los sistemas batch es considerado un sistema *le
 - Autenticación: Usuario y contraseña, HTTP/HTTPS, Kerberos/LDAP
 - Tipo de licencia/propietario: Apache 2.0
 - Versión actual: 2.3.0
+- Driver ODBC: sí
 
 Impala
 ^^^^^^
 
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
+Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop, originalmente desarrollado por Cloudera.
+
+Apache Impala es compatible con HiveQL y utiliza la misma base de datos de metadatos para acceder a HDFS que Hive, pero a diferencia de este, cuenta con un modelo de procesamiento en memoria de baja latencia que permite realizar consultas interactivas orientadas a entornos *Business Intelligence*.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Oracle, MapR)
+- Interfaces de programación/consulta: HiveQL compatible con SQL
+- Autenticación: Usuario contraseña, Kerberos, Sentry
+- Tipo de licencia/propietario: Apache 2.0
+- Versión actual: 2.10.0
+- Driver ODBC: sí
+
 
 Amazon Redshift
 ^^^^^^^^^^^^^^^
 
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
+Amazon Redshift es un almacén de datos rápido y completamente administrado que permite analizar todos los datos empleando de forma sencilla y rentable SQL estándar y las herramientas de Business Intelligence existentes.
+
+Forma parte de la familia de servicios web de Amazon, por tanto se integra con gran parte de sus servicios, como por ejemplo Amazon S3.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: Nube pública (Amazon Web Services)
+- Interfaces de programación/consulta: SQL
+- Autenticación: Usuario y contraseña.
+- Tipo de licencia/propietario: Propietario.
+- Versión actual: Desconocida (Desde julio de 2017 Amazon no publica detalles sobre versionado)
+- Driver ODBC: Sí
 
 MongoDB
 ^^^^^^^
 
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
+MongoDB es una base de datos orientada a objetos que pertenece a la familia de bases de datos NoSQL. Está diseñada para soportar escalabilidad, particionamiento, replicación, alta disponibilidad siendo de las primeras bases de datos NoSQL en ofrecer estas características y una de las más populares en la actualidad.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: on-premises
+- Interfaces de programación/consulta: Javascript (nativo) y otros SDK con lenguajes varios.
+- Autenticación: Usuario y contraseña, Kerberos/LDAP
+- Tipo de licencia/propietario: AGPL v3.0
+- Versión actual: 3.4
+- Driver ODBC: Sí
 
 Google BigQuery
 ^^^^^^^^^^^^^^^
 
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
+Google BigQuery es el almacen de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
+
+Google BigQuery es un sistema de almacenamiento con una arquitectura serverless y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage, el soporte de OAuth y acceso a través de API REST o SDKs en diferentes lenguajes.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: SaaS
+- Interfaces de programación/consulta: API REST, SDKs
+- Autenticación: OAuth
+- Tipo de licencia/propietario: Propietario (Google)
 
 Cassandra
 ^^^^^^^^^
