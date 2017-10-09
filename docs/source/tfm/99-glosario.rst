@@ -12,6 +12,9 @@ CSV
 ERP
 ---
 
+Firewall
+--------
+
 HDFS
 ----
 
@@ -23,5 +26,5 @@ Location Intelligence
 NoSQL
 -----
 
-Open source
------------
+On premise
+----------

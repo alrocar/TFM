@@ -6,6 +6,8 @@ Metodología y plan de trabajo
 Metodología
 -----------
 
+TODO: Explicar cuál es la solución propuesta en base a lo que se ha visto tras el estudio del estado del arte, FDW, drivers y cómo se va a proceder durante el desarrollo.
+
 Para llevar a cabo el plan de trabajo se va a seguir una metodología de desarrollo iterativo incremental. Se trata de una metodología de desarrollo de software ágil que consiste en la ejecución de las distintas fases del proyecto en ciclos cortos de pocos días que se repiten en el tiempo, de manera que se va incrementando el valor de la solución final.
 
 Esta metodología nos va a permitir validar en una frase temprana la solución propuesta, realizando una iteración que permita validar la integración de Hive e Impala con CARTO.
@@ -15,8 +17,6 @@ Una vez validado uno de estos sistemas de almacenamiento, se continúan realizan
 En última instancia, se trabaja en la ingestión de datos y creación del dashboard a modo de demostración.
 
 Por otra parte, como segundo objetivo metodológico, se pretende que todo el entorno sea fácilmente reproducible, así pues, se utilizan herramientas que facilitan la automatización y colaboración: Github, BASH, Vagrant, Docker, etc. Con lo que es posible reproducir todo el desarrollo realizado durante el trabajo final de máster.
-
-TODO: Explicar cuál es la solución propuesta en base a lo que se ha visto tras el estudio del estado del arte
 
 Plan de trabajo
 ---------------
@@ -51,6 +51,8 @@ Desarrollo de conectores para CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Este bloque consiste en la implementación y prueba de los diferentes módulos que permitan conectar CARTO con los sistemas de almacenamiento mencionados previamente a través de su API de importación.
+
+En este caso, el objetivo consiste en contar con conectores integrados en el código base de CARTO, de manera que sean incluidos en su versión *on premise*.
 
 Para el desarrollo de deste bloque se realizan las siguientes tareas:
 
