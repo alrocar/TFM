@@ -33,11 +33,11 @@ Objetivo
 
 El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para **CARTO** que permitan incluir en los cuadros de mandos (*dashboards*), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento big data:
 
-- Hive
+- Apache Hive
 - Impala
 - Amazon Redshift
 - MongoDB
-- BigQuery
+- Google BigQuery
 
 - Cassandra
 - SparkSQL
