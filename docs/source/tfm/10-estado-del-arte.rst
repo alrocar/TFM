@@ -3,11 +3,7 @@
 Estado del arte
 ===============
 
-En este capítulo se presenta un informe sobre los trabajos que se han realizado hasta el momento sobre el tema y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
-
-En primer lugar, se trata de CARTO como plataforma de *Location Intelligence* sobre la que se va a dar soporte para conectar sistemas de almacenamiento big data y las diferentes posibilidades de conexión que presenta.
-
-En segundo lugar, se trata de el estado actual en cuanto a sistemas de almacenamiento y procesamiento big data, especificando entre otros su modelo de procesamiento, posibilidades de despliegue o lenguaje de acceso a datos.
+En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento big data para los que se van a realizar conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
 
 CARTO
 -----
@@ -21,8 +17,79 @@ Características:
 - Datos estructurados
 
 
-Sistemas de almacenamiento big data
------------------------------------
+Sistemas de almacenamiento y procesamiento big data
+---------------------------------------------------
+
+En este trabajo se estudian los siguientes sistemas de almacenamiento y procesamiento big data:
+
+- Hive
+- Impala
+- Amazon Redshift
+- MongoDB
+- Google BigQuery
+
+- Cassandra
+- SparkSQL
+
+- Amazon Aurora
+- Oracle
+
+- MemSQL
+- Teradata
+- SAP Hana
+
+Como se puede observar de la lista, el ecosistema es muy amplio y como veremos a continuación, heterogéneo. Por lo que en esta sección se va a hacer una breve descripción de los mismos atendiendo a las siguientes características:
+
+- Tipo de sistema: Si ofrece almacenamiento y procesamiento o sólo uno de ambos.
+- Tipo de procesamiento: Batch, interactivo, tiempo real, etc.
+- Tipo de despliegue/distribución: Nube pública, privada, SaaS, etc.
+- Interfaces de programación/consulta: SQL, SDKs en diferentes lenguajes, APIs REST, etc.
+- Autenticación: HTTP/HTTPS, Kerberos/LDAP, OAuth, etc.
+- Tipo de licencia/propietario: Software libre (Apache, GPL, etc.), propietaria (Google, Amazon, Oracle, etc.)
+
+Para el motivo de este trabajo, no es necesario conocer otros detalles como mecanismos de replicación, particionamiento, tolerancia a fallos, etc. ya que el objetivo no consiste en administrar este tipo de sistemas.
+
+Sin embargo, el objetivo es doble:
+
+1. Por una parte, contar con una visión general de los sistemas con los que se va a trabajar.
+2. Por otra parte, poder identificar similitudes y diferencias entre ellos.
+3. Por último, dar soporte al mayor número posible de tecnologías de almacenamiento y procesamiento big data, especialmente aquellas de carácter libre.
+
+Hive
+^^^^
+
+Impala
+^^^^^^
+
+Amazon Redshift
+^^^^^^^^^^^^^^^
+
+MongoDB
+^^^^^^^
+
+Google BigQuery
+^^^^^^^^^^^^^^^
+
+Cassandra
+^^^^^^^^^
+
+SparkSQL
+^^^^^^^^
+
+Amazon Aurora
+^^^^^^^^^^^^^
+
+Oracle
+^^^^^^
+
+MemSQL
+^^^^^^
+
+Teradata
+^^^^^^^^
+
+SAP Hana
+^^^^^^^^
 
 - Sistemas de almacenamiento y procesamiento distribuido
   - Hadoop
@@ -39,10 +106,3 @@ Sistemas de almacenamiento big data
     - BigQuery
     - Redshift
     - Oracle
-  
-- Tabla comparativa
-
-Tipo procesamento:Batch,Interactivo
-Tipo despliegue:SaaS,cloud pública,cloud privada/onpremise
-Tipo lenguaje:SQL,NoSQL,otro(API REST, clave valor)
-Autenticación
