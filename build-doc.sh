@@ -1,5 +1,5 @@
 #!/bin/bash
 
 pip install -r requirements.txt
-cd doc
+cd docs
 make clean && make html && make latex && make latexpdf
