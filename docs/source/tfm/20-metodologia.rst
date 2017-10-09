@@ -23,17 +23,17 @@ Plan de trabajo
 
 El trabajo final de máster consta de 3 grandes bloques en su desarrollo.
 
-1. Despliegue de distintos sistemas de almacenamiento masivo en la nube de Amazon.
+1. Despliegue de distintos sistemas de almacenamiento big data en la nube de Amazon.
 2. Desarrollo de conectores para CARTO.
 3. Ingestión de datos de prueba y creación de un dashboard de visualización de datos geoespaciales con CARTO
 provenientes de uno o más de los sistemas implementados
 
 El plan de trabajo detallado consiste en las siguientes tareas:
 
-Despliegue de sistemas de almacenamiento masivo en la nube de Amazon
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Despliegue de sistemas de almacenamiento big data en la nube de Amazon
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Esta tarea consiste en explorar las diferentes alternativas para desplegar sistemas de almacenamiento distribuido en la nube.
+Esta tarea consiste en explorar las diferentes alternativas para desplegar sistemas de almacenamiento big data en la nube.
 
 El objetivo no es contar con despliegues robustos, resistentes a fallos o configurados en cluster, sino contar con diferentes entornos para realizar la ingestión de datos de prueba y conexión necesaria durante el desarrollo y demostración de los conectores para CARTO.
 
@@ -65,7 +65,7 @@ Para el desarrollo de deste bloque se realizan las siguientes tareas:
 Ingestión de datos de prueba y creación de dashboard con CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Una vez desplegados diferentes sistemas de almacenamiento distribuido en la nube, desarrollados los conectores y desplegada una instancia de CARTO, el último bloque consiste en realizar una pequeña demostración sobre un *dashboard* que consuma datos obtenidos de uno o más de estos sistemas desplegados.
+Una vez desplegados diferentes sistemas de almacenamiento big data en la nube, desarrollados los conectores y desplegada una instancia de CARTO, el último bloque consiste en realizar una pequeña demostración sobre un *dashboard* que consuma datos obtenidos de uno o más de estos sistemas desplegados.
 
 Para el desarrollo de deste bloque se realizan las siguientes tareas:
 

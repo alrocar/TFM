@@ -5,26 +5,42 @@ Estado del arte
 
 En este capítulo se presenta un informe sobre los trabajos que se han realizado hasta el momento sobre el tema y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
 
-- Dos conceptos fundamentales 
-  - Business Intelligence ~ Location Intelligence
-    - CARTO: Arquitectura
-      - PostgreSQL/PostGIS como base de datos y framework de análisis 
-  - Sistemas de almacenamiento y procesamiento distribuido
+En primer lugar, se trata de CARTO como plataforma de *Location Intelligence* sobre la que se va a dar soporte para conectar sistemas de almacenamiento big data y las diferentes posibilidades de conexión que presenta.
+
+En segundo lugar, se trata de el estado actual en cuanto a sistemas de almacenamiento y procesamiento big data, especificando entre otros su modelo de procesamiento, posibilidades de despliegue o lenguaje de acceso a datos.
+
+CARTO
+-----
+
+- Business Intelligence ~ Location Intelligence
+- CARTO: Arquitectura
+  - PostgreSQL/PostGIS como base de datos y framework de análisis 
+
+Características:
+
+- Datos estructurados
+
+
+Sistemas de almacenamiento big data
+-----------------------------------
+
+- Sistemas de almacenamiento y procesamiento distribuido
+  - Hadoop
     - HDFS
-      - SQL: Hive, Impala
-      - Sobre Hive hablar de todas las distribuciones (AWS, Cloudera, Horton, MapR)
-    - NoSQL
-      - Cassandra
-      - MongoDB
-    - Spark
-      - SQL
-    - Otros: 
-      - Elastic Search/Solr
-      - BigQuery
-      - Redshift
-      - Oracle
+    - SQL: Hive, Impala
+    - Sobre Hive hablar de todas las distribuciones (AWS, Cloudera, Horton, MapR)
+  - NoSQL
+    - Cassandra
+    - MongoDB
+  - Spark
+    - SQL
+  - Otros: 
+    - Elastic Search/Solr
+    - BigQuery
+    - Redshift
+    - Oracle
   
- - Tabla comparativa
+- Tabla comparativa
 
 Tipo procesamento:Batch,Interactivo
 Tipo despliegue:SaaS,cloud pública,cloud privada/onpremise

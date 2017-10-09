@@ -1,5 +1,5 @@
-Resumen ejecutivo
-=================
+Introducción
+============
 
 Contexto
 --------
@@ -26,14 +26,30 @@ Definición del problema
 
 Estas organizaciones utilizan **CARTO** para importar sus datos y analizar la información que generan los distintos departamentos de manera conjunta, respondiendo a sus preguntas de negocio y encontrando además respuesta a otras preguntas que no se habían planteado en un principio.
 
-**CARTO** cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a sistemas de almacenamiento masivo de datos usados generalmente para almacenar datos operacionales y resultados agregados obtenidos por los departamentos de *data science*.
+**CARTO** cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a muchos de estos sistemas de almacenamiento big data usados generalmente para almacenar datos operacionales y resultados agregados obtenidos por los departamentos de *data science*.
 
 Objetivo
 --------
 
-El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para **CARTO** que permitan incluir en los cuadros de mandos (*dashboards*), información proveniente de sistemas de almacenamiento masivo tales como: HDFS, Hive, Impala, MongoDB, Cassandra, BigQuery u otros.
+El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para **CARTO** que permitan incluir en los cuadros de mandos (*dashboards*), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento big data:
 
-Estos conectores para **CARTO** permitirán a las organizaciones mantener sus actuales flujos de ingestión y procesamiento de información, además de aprovechar lo mejor de dos mundos: el almacenamiento y procesamiento distribuido que ofrecen algunas de estas herramientas orientadas a Big Data y la visualiación y análisis geoespacial de **CARTO**.
+- Hive
+- Impala
+- Amazon Redshift
+- MongoDB
+- BigQuery
+
+- Cassandra
+- SparkSQL
+
+- Amazon Aurora
+- Oracle
+
+- MemSQL
+- Teradata
+- SAP Hana
+
+Los "conectores big data para **CARTO**" permitirán a las organizaciones mantener sus actuales flujos de ingestión y procesamiento de información, además de aprovechar lo mejor de dos mundos: el almacenamiento y procesamiento distribuido que ofrecen algunas de estas herramientas orientadas a big data y la visualiación y análisis geoespacial de **CARTO**.
 
 Cabe destacar que los resultados de este trabajo no son de carácter teórico, sino que consiste en código fuente y herramientas que se incluirán en la distribución *on premise* de **CARTO**
 
@@ -42,8 +58,8 @@ Organización de este trabajo final de máster
 
 Este trabajo final de máster está organizado en capítulos, siguiendo la siguiente estructura:
 
-1. :ref:`estado-del-arte`: Se repasan algunas de las herramientas de almacenamiento y procesamiento distribuido de información que con las que se va a trabajar y se definen algunos de los conceptos teóricos que sirven de fundamentación para el trabajo.
-2. :ref:`metodologia`: Plan de trabajo y metodología utilizada.
+1. :ref:`estado-del-arte`: Se repasan las herramientas de almacenamiento y procesamiento distribuido big data con las que se va a trabajar y se definen algunos de los conceptos teóricos que sirven de fundamentación para el trabajo.
+2. :ref:`metodologia`: Metodología y plan de trabajo utilizados.
 3. :ref:`desarrollo`: Desarrollo de la solución y resultados obtenidos.
 4. :ref:`conclusiones`
 5. :ref:`bibliografia`
