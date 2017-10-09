@@ -72,6 +72,8 @@ Ofrece un lenguaje de consulta basado en SQL llamado HiveQL que convierte las co
 
 Actualmente, como gran parte de los sistemas batch es considerado un sistema *legacy*, aunque por otra parte es un sistema apliamente establecido en la industria que cuenta con gran cantidad de herramientas integradoras dentro del sistema Hadoop tales como: Pig, Sqoop, Flume, etc.
 
+Se suele utilizar para procesamiento batch de ficheros almacenados en HDFS.
+
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Batch.
 - Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Hortonworks, MapR)
@@ -87,6 +89,8 @@ Impala
 Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop, originalmente desarrollado por Cloudera.
 
 Apache Impala es compatible con HiveQL y utiliza la misma base de datos de metadatos para acceder a HDFS que Hive, pero a diferencia de este, cuenta con un modelo de procesamiento en memoria de baja latencia que permite realizar consultas interactivas orientadas a entornos *Business Intelligence*.
+
+Se suele utilizar para procesamiento de ficheros almacenados HDFS con menor latencia que Hive y por tanto orientada a aplicaciones finales.
 
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Interactivo.
@@ -105,19 +109,23 @@ Amazon Redshift es un almacén de datos rápido y completamente administrado que
 
 Forma parte de la familia de servicios web de Amazon, por tanto se integra con gran parte de sus servicios, como por ejemplo Amazon S3.
 
+Se suele utilizar para almacenar y analizar datos en entornos donde es necesaria una alta integración con otros servicios de AWS.
+
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Interactivo.
 - Tipo de despliegue/distribución: Nube pública (Amazon Web Services)
 - Interfaces de programación/consulta: SQL
 - Autenticación: Usuario y contraseña.
 - Tipo de licencia/propietario: Propietario.
-- Versión actual: Desconocida (Desde julio de 2017 Amazon no publica detalles sobre versionado)
+- Versión actual: Al ser un servicio auto-administrado por Amazon no se ofrece información de versiones
 - Driver ODBC: Sí
 
 MongoDB
 ^^^^^^^
 
 MongoDB es una base de datos orientada a objetos que pertenece a la familia de bases de datos NoSQL. Está diseñada para soportar escalabilidad, particionamiento, replicación, alta disponibilidad siendo de las primeras bases de datos NoSQL en ofrecer estas características y una de las más populares en la actualidad.
+
+Se suele utilizar como base de datos operacional y es muy popular en arquitecturas MEAN, en las que tanto el front como el backend están desarrollados sobre Javascript.
 
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Interactivo.
@@ -131,26 +139,38 @@ MongoDB es una base de datos orientada a objetos que pertenece a la familia de b
 Google BigQuery
 ^^^^^^^^^^^^^^^
 
-Google BigQuery es el almacen de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
+Google BigQuery es el almacén de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
 
 Google BigQuery es un sistema de almacenamiento con una arquitectura serverless y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage, el soporte de OAuth y acceso a través de API REST o SDKs en diferentes lenguajes.
+
+Se suele utilizar en entornos donde se requiere integración con otros servicios de Google y en los que se pretende evitar el coste de mantenimiento de infraestructura.
 
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Interactivo.
 - Tipo de despliegue/distribución: SaaS
 - Interfaces de programación/consulta: API REST, SDKs
 - Autenticación: OAuth
+- Versión actual: Al ser un servicio auto-administrado por Google no se ofrece información de versiones
 - Tipo de licencia/propietario: Propietario (Google)
+- Driver ODBC: Sí
 
 Cassandra
 ^^^^^^^^^
 
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
+Apache Cassanda es un sistema de almacenamiento big data de la familia de bases de datos NoSQL, en este caso orientada a columnas.
+
+Entre sus características destaca el estar orientada a la tolerancia a fallos y alta disponibilidad, además de escalar linealmente y ofrecer una baja latencia.
+
+Se suele utilizar como base de datos operacional, en sistemas con gran carga de datos en los que las consultas son indexables por pocas columnas.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: on-premise
+- Interfaces de programación/consulta: CQL (Similar a SQL)
+- Autenticación: Usuario y contraseña
+- Tipo de licencia/propietario: Apache 2.0
+- Versión actual: 3.11.0
+- Driver ODBC: Sí
 
 SparkSQL
 ^^^^^^^^
