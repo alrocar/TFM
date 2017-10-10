@@ -3,6 +3,14 @@
 Desarrollo del trabajo y resultados obtenidos
 =============================================
 
+6. Desarrollo del trabajo y resultados obtenidos.
+
+- CARTO: Arquitectura
+      - PostGIS
+        - FDW: pg_fdw or custom
+        - ODBC drivers
+        
+
 De acuerdo a la metodología definida en el apartado a interior, en este apartado se incluye el desarrollo de la misma para cada uno de los sistemas de almacenamiento big data objetivo de ser integrados con CARTO.
 
 El objetivo es contar con un procedimiento sistemático que incluya al menos las siguientes fases, para cada sistema de almacenamiento:
@@ -66,12 +74,24 @@ Deteniendo los siguientes servicios es posible arrancar una imagen de Cloudera Q
 
 Después de detener los servicios es importante reiniciar la interfaz de HUE que nos permitirá realizar consultas interactivas sobre Hive con el siguiente comando: `/etc/init.d/hue restart`
 
+Ingestión de datos en Apache Hive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-See `this guide`_ to learn how to ingest data into Hive
+Una vez hemos desplegado Apache Hive utilizando la imagen de Cloudera Quickstart con Docker, podemos hacer una ingestión inicial de datos para posteriormente realizar las pruebas necesarias de integración con CARTO.
 
-.. _this guide: https://www.cloudera.com/developers/get-started-with-hadoop-tutorial/exercise-1.html
+Accediendo al servidor EC2 de Amazon:
 
-Basically run the `sqoop` importer from within the Docker container:
+::
+
+    ssh {path_to_pem_file} {user}@{server}
+
+Y a continuación abriendo una sesión de bash en el contenedor de Cloudera Quickstart:
+
+::
+
+	docker exec -it cloudera /bin/bash
+
+Podemos utilizar `sqoop` para hacer una ingestión inicial de datos en Hive desde una base de datos MySQL incluida en la imagen de Cloudera con el siguiente comando:
 
 ::
 
@@ -84,7 +104,9 @@ Basically run the `sqoop` importer from within the Docker container:
         --warehouse-dir=/user/hive/warehouse \
         --hive-import
 
-Test that it works by going to the HUE dashboard and run some queries:
+Por último, podemos acceder a la interfaz de HUE y comprobar que efectivamente las tablas se han cargado correctamente en Hive
+
+TODO: añadir capturas de pantalla
 
 ::
 
@@ -92,9 +114,3 @@ Test that it works by going to the HUE dashboard and run some queries:
     usr/pwd: cloudera/cloudera
 
 
-6. Desarrollo del trabajo y resultados obtenidos.
-
-- CARTO: Arquitectura
-      - PostGIS
-        - FDW: pg_fdw or custom
-        - ODBC drivers
