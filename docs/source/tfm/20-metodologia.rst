@@ -12,6 +12,9 @@ Aún siendo un ecosistema tan heterógeneo, es importante definir una metodolog�
 
 Así pues, en la definición de esta metodología sistemática, debemos encontrar un nexo de unión entre todos estos sistemas y CARTO.
 
+¿Cómo conectar con CARTO?
+-------------------------
+
 De acuerdo a la arquitectura de CARTO, la integración con sistemas de terceros se puede realizar a dos niveles:
 
 - Utilizando sus APIs, algunas de las cuales exponen interfaces para acceder directamente a todas las capacidades de PostgreSQL a través de SQL estándar.

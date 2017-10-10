@@ -422,10 +422,11 @@ Una vez más, la petición a la API de importación de CARTO es análoga a la de
 Antes de continuar
 ------------------
 
-Antes de continuar con el desarrollo de los siguientes conectores big data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemática para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
+Antes de continuar con el desarrollo de los siguientes conectores big data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemático para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
 
 - Tienen un Driver ODBC
 - Soportan SQL como lenguaje de procesamiento
 - Son compatibles con `postgres_fdw`
 
 Tal y como hemos visto en las secciones anteriores, el desarrollo de conectores para Hive, Impala y Redshift es completamente análogo, por tanto, el mismo procedimiento sería válido para sistemas de almacenamiento que cumplan las 3 características mencionadas en esta sección.
+
