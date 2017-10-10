@@ -39,7 +39,7 @@ La integración de CARTO con Apache Hive se va a realizar de acuerdo a los sigui
 - Soporta SQL: Sí
 - Driver ODBC: Sí
 - Compatible con `postgres_fdw`: Sí
-- Versión actual: 2.3.0
+- Versión probada: 2.3.0
 - Autenticación: Usuario y contraseña
 - Distribución: Cloudera Quickstart
 - Despliegue: Docker sobre AWS
@@ -174,31 +174,6 @@ Puesto que el driver ODBC para Hive es compatible con `postgres_fdw` la implemen
 
 El código del conector `hive.rb` se adjunta en el anexo xxx -> TODO incluir enlace
 
-Una vez disponemos del código del conector, hay que configurarlo en CARTO de la siguiente manera:
-
-::
-
-    cp /opt/carto/builder/embedded/cartodb/lib/carto/connector/providers/hive.rb /opt/carto/builder/embedded/cartodb/lib/carto/connector/providers/hive.rb.bk
-    sed 's/Hortonworks Hive ODBC Driver 64-bit/Hive/g' /opt/carto/builder/embedded/cartodb/lib/carto/connector/providers/hive.rb.bk > /opt/carto/builder/embedded/cartodb/lib/carto/connector/providers/hive.rb
-
-A continuación, reiniciar los procesos de CARTO que hacen uso de los conectores:
-
-::
-
-    /etc/init.d/builder restart
-    /etc/init.d/resque restart
-
-Finalmente, habilitar el conector para una organización:
-
-Enabling the Hive ODBC connector for the organization `organization`
-
-::
-
-    cd /opt/carto/builder/embedded/cartodb
-    RAILS_ENV=production RAILS_CONFIG_BASE_PATH=/data/production/config/builder bundle exec rake cartodb:connectors:create_providers
-    RAILS_ENV=production RAILS_CONFIG_BASE_PATH=/data/production/config/builder bundle exec rake cartodb:connectors:set_org_config[hive,organization,true,1000000]
-    RAILS_ENV=production RAILS_CONFIG_BASE_PATH=/data/production/config/builder bundle exec rake cartodb:connectors:set_org_config[odbc,organization,true,1000000]
-
 Ingestion de datos desde Hive a CARTO
 -------------------------------------
 
@@ -232,4 +207,133 @@ Una vez realizada la conexión, se crea una tabla en PostgreSQL de nombre `top_o
 
 Hive transformará está consulta SQL en un trabajo MapReduce y devolverá el resultado al Foreign Data Wrapper, convirtiéndose en filas de la tabla en PostgreSQL.
 
-Esta table de PostgreSQL está asociada a un dataset del usuario de CARTO que lanzó la petición y por tanto puede trabajar con él, de la misma manera que con cualquier otro dataset.
+Esta tabla de PostgreSQL está asociada a un dataset del usuario de CARTO que lanzó la petición y por tanto puede trabajar con él, de la misma manera que con cualquier otro dataset.
+
+Integración de CARTO con Apache Impala
+--------------------------------------
+
+Apache Impala es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop, originalmente desarrollado por Cloudera.
+
+Apache Impala es compatible con HiveQL y utiliza la misma base de datos de metadatos para acceder a HDFS que Hive, pero a diferencia de este, cuenta con un modelo de procesamiento en memoria de baja latencia que permite realizar consultas interactivas orientadas a entornos *Business Intelligence*.
+
+La integración de CARTO con Apache Impala se va a realizar de acuerdo a los siguientes parámetros:
+
+- Soporta SQL: Sí
+- Driver ODBC: Sí
+- Compatible con `postgres_fdw`: Sí
+- Versión probada: 2.10.0
+- Autenticación: Usuario y contraseña
+- Distribución: Cloudera Quickstart
+- Despliegue: Docker sobre AWS
+
+Despliegue de un entorno de prueba de Apache Impala
+---------------------------------------------------
+
+Para desplegar una instancia de Apache Impala, utilizamos la imagen de Cloudera Quickstart disponible en Docker Hub, tal y como hicimos al desplegar Apache Hive.
+
+TODO añadir link a la sección anterior
+
+Ingestión de datos en Apache Impala
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Apache Impala es compatible con el modelo de metadatos de Apache Hive, por tanto, se pueden ingestar datos en Apache Impala tal y como se hizo para Apache Hive. [TODO] -> Añadir link a la sección correspondiente.
+
+Una vez presentes los datos en el `metastore` de Hive, es necesario ejecutar la siguiente instrucción para actualizar la base de datos de metadatos de Impala:
+
+::
+
+    invalidate metadata;
+
+Dicha instrucción se puede ejecutar directamente desde la consola de Impala disponible en HUE y accesible con las siguientes credenciales:
+
+::
+
+    http://localhost:8888/
+    usr/pwd: cloudera/cloudera
+
+Instalación y prueba de un driver ODBC para Impala
+--------------------------------------------------
+
+El procedimiento para instalar el driver ODBC para Impala es similar al de Hive [TODO] -> link a la sección correspondiente.
+
+::
+
+    yum install -y cyrus-sasl.x86_64 cyrus-sasl-gssapi.x86_64 cyrus-sasl-plain.x86_64
+    wget "https://downloads.cloudera.com/connectors/impala_odbc_2.5.37.1014/Linux/EL6/ClouderaImpalaODBC-2.5.37.1014-1.el6.x86_64.rpm"
+    yum --nogpgcheck -y localinstall ClouderaImpalaODBC-2.5.37.1014-1.el6.x86_64.rpm
+
+Configuración del driver ODBC para Impala
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Una vez descargado el driver ODBC para Impala es necesario editar los archivos que PostgreSQL utiliza para conocer los drivers disponibles en el sistema.
+
+La ubicación de los archivos de configuración se puede obtener ejecutando la siguiente instrucción:
+
+::
+
+    [root@localhost vagrant]# odbcinst -j
+        unixODBC 2.3.4
+        DRIVERS............: /opt/carto/postgresql/embedded/etc/odbcinst.ini
+        SYSTEM DATA SOURCES: /opt/carto/postgresql/embedded/etc/odbc.ini
+        FILE DATA SOURCES..: /opt/carto/postgresql/embedded/etc/ODBCDataSources
+        USER DATA SOURCES..: /root/.odbc.ini
+        SQLULEN Size.......: 8
+        SQLLEN Size........: 8
+        SQLSETPOSIROW Size.: 8
+
+El comando `odbcinst` lo provee el paquete `unixODBC` que viene instalado por defecto en la distribución on-premise de CARTO.
+
+Una vez conocemos la ubicación de los archivos de configuración, añadimos el driver de Impala a la lista de drivers disponibles:
+
+::
+
+    printf "\n[Impala]
+    Description=Cloudera ODBC Driver for Impala (64-bit)
+    Driver=/opt/cloudera/impalaodbc/lib/64/libclouderaimpalaodbc64.so" >> /data/production/config/postgresql/odbcinst.ini
+
+Instalación y prueba de un Foreign Data Wrapper para Impala
+-----------------------------------------------------------
+
+Análogamente a lo que ocurría con Hive, el driver ODBC de Cloudera para Apache Impala también es compatible con `postgres_fdw` del que CARTO cuenta con una implementación base. Por tanto, no es necesaria una implementación personalizada.
+
+Desarrollo de un conector de Impala para CARTO
+----------------------------------------------
+
+Puesto que el driver ODBC para Impala es compatible con `postgres_fdw` la implementación de un conector de Impala para CARTO se reduce a añadir una nueva clase al `backend` indicando cuáles son los parámetros necesarios para realizar una consulta SQL sobre Impala y configurar este conector para que sea accesible desde la API de importación de CARTO.
+
+El código del conector `impala.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+
+Ingestion de datos desde Impala a CARTO
+---------------------------------------
+
+Una vez más, la petición a la API de importación de CARTO es análoga a la del caso de Hive.
+
+::
+
+    curl -v -k -H "Content-Type: application/json"   -d '{
+      "connector": {
+        "provider": "impala",
+        "connection": {
+          "server":"{impala_server_ip}",
+          "database":"default",
+          "port":21050,
+          "username":"{impala_user}",
+          "password":"{impala_password}"
+        },
+        "schema": "default",
+        "table": "top_order_items",
+        "sql_query": "select * from order_items where price > 1000"
+      }
+    }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
+
+La anterior llamada a la API de importación, crea una conexión mediante Foreign Data Wrapper desde el servidor de CARTO (en concreto desde el servidor de PostgreSQL) hacia el servidor de Impala a través del puerto 21050 (el puerto por defecto de Impala).
+
+Una vez realizada la conexión, se crea una tabla en PostgreSQL de nombre `top_order_items` y se ejecuta la siguiente consulta en Impala para obtener los pedidos con un precio superior a mil dólares:
+
+::
+
+    select * from order_items where price > 1000
+
+En este caso, Impala no implementa el paradigma MapReduce sino que utiliza un mecanismo de procesamiento en memoria que permite la realización de consultas interactivas, por lo que la respuesta tiene una latencia menor al caso de Hive.
+
+La tabla generada en PostgreSQL está asociada a un dataset del usuario de CARTO que lanzó la petición y por tanto puede trabajar con él, de la misma manera que con cualquier otro dataset.

@@ -16,3 +16,5 @@ See `this guide`_ to learn how to ingest data into Hive
 Have at hand the `documentation`_
 
 .. _documentation: www.cloudera.com/documentation/other/connectors/hive-odbc/2-5-12/Cloudera-ODBC-Driver-for-Apache-Hive-Install-Guide-2-5-12.pdf
+
+Impala docs -> https://www.cloudera.com/documentation/other/connectors/impala-odbc/latest/Cloudera-ODBC-Driver-for-Impala-Install-Guide.pdf
