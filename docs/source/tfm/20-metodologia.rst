@@ -36,12 +36,13 @@ Con esto, podemos concluir que la utilización de Foreign Data Wrappers para con
 
 Con esta premisa, vamos a definir, una metodología, que se pueda probar y repetir, para conectar CARTO con Hive, Impala, Redshift, BigQuery, MongoDB y en definitiva, cualquier sistema de almacenamiento.
 
-Esta metodología consta de 4 fases, que se desarrollarán para cada sistema en la siguiente sección :ref:`desarrollo` y que se enumeran a continuación:
+Esta metodología consta de 5 fases, que se desarrollarán para cada sistema en la siguiente sección :ref:`desarrollo` y que se enumeran a continuación:
 
 1. Despliegue de un entorno de prueba del sistema de almacenamiento big data
 2. Búsqueda, instalación y prueba de un driver ODBC compatible
 3. Búsqueda, instalación y prueba de un Foreign Data Wrapper (opcionalmente se puede utilizar la implementación base de PostgreSQL o implementar una propia)
-4. Ingestión de datos hacia CARTO
+4. Desarrollo de un conector para CARTO
+5. Ingestión de datos hacia CARTO
 
 
 Plan de trabajo
