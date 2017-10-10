@@ -10,6 +10,7 @@ Conceptos previos
 
 - Procesamiento batch vs interactivo (Interactivo es batch pero con latencia del orden de segundos o minutos en caso de análisis de petabytes)
 - Driver ODBC
+- Foreign Data Wrapper
 
 CARTO
 -----
