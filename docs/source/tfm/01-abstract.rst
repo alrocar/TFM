@@ -65,10 +65,10 @@ Este trabajo final de máster está organizado en capítulos, siguiendo la sigui
 
 Palabras clave: *BASH, Docker, Vagrant, Location Intelligence, AWS, HDFS, Hadoop, BigQuery, Hive, Impala, Spark, NoSQL, Cassandra, MongoDB, CARTO, dashboards, análisis geoespacial*
 
-.. [#f1] https://www.carto.com, septiembre 2017
-.. [#f2] https://drive.google.com, septiembre 2017
-.. [#f3] https://www.salesforce.com, septiembre 2017
-.. [#f4] https://mailchimp.com, septiembre 2017
-.. [#f5] https://www.arcgis.com, septiembre 2017
-.. [#f6] https://www.twitter.com, septiembre 2017
-.. [#f7] https://www.dropbox.com, septiembre 2017
+.. [#f1] https://www.carto.com - septiembre 2017
+.. [#f2] https://drive.google.com - septiembre 2017
+.. [#f3] https://www.salesforce.com - septiembre 2017
+.. [#f4] https://mailchimp.com - septiembre 2017
+.. [#f5] https://www.arcgis.com - septiembre 2017
+.. [#f6] https://www.twitter.com - septiembre 2017
+.. [#f7] https://www.dropbox.com - septiembre 2017
