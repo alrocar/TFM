@@ -574,6 +574,7 @@ A continuación compilamos e instalamos el driver nativo para MongoDB y todas la
 Llegados a este punto, debemos ser capaces de probar el FDW `mongo_fdw` directamente desde la consola `psql` ejecutando las siguientes instrucciones:
 
 ::
+    
     psql -U postgres
     CREATE EXTENSION mongo_fdw;
     CREATE SERVER mongo_server
@@ -653,7 +654,7 @@ Google ofrece una capa gratuita para BigQuery (a fecha septiembre de 2017), con 
 No se especifican detalles de cómo habilitar una cuenta de Google BigQuery, ya que es un procedimiento totalmente auto-descriptivo, desde la consola de administración de Google Cloud.
 
 Ingestión de datos en Google BigQuery
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [TODO] -> Pantallazos de las interfaces e importación de CSV
 
@@ -834,7 +835,6 @@ Una vez disponemos de un `refresh token` se puede utilizar la API de importació
         "sql_query": "select * from `eternal-ship-170218.test.test` limit 1;"
       }
     }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
-::
 
 En ambos casos, las peticiones a la API de importación son ligeramente diferentes a las que vimos en los conectores para Hive, Impala, Redshift o MongoDB. El motivo es que Google BigQuery necesita de parámetros adicionales, por tanto utilizamos una implementación genérica de FDW para drivers ODBC.
 

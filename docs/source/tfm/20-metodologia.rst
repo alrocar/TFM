@@ -55,8 +55,8 @@ El trabajo final de máster consta de 3 grandes bloques en su desarrollo.
 
 1. Despliegue de distintos sistemas de almacenamiento big data en la nube de Amazon.
 2. Desarrollo de conectores para CARTO.
-3. Ingestión de datos de prueba y creación de un dashboard de visualización de datos geoespaciales con CARTO
-provenientes de uno o más de los sistemas implementados
+3. Ingestión de datos de prueba y creación de un dashboard de visualización de datos geoespaciales con CARTO provenientes de uno o más de los sistemas implementados.
+
 
 El plan de trabajo detallado consiste en las siguientes tareas:
 
@@ -101,8 +101,8 @@ Para el desarrollo de deste bloque se realizan las siguientes tareas:
 
 - Ingestión de datos en los distintos sistemas de almacenamiento provistos.
 - Ejecución de las llamadas necesarias mediante la API de importación de CARTO para conectar con uno o más sistemas de almacenamiento.
-- Creación de un dashboard de análisis y visualización de datos geoespaciales con CARTO
-provenientes de uno o más de los sistemas implementados.
+- Creación de un dashboard de análisis y visualización de datos geoespaciales con CARTO provenientes de uno o más de los sistemas implementados.
+
 
 TODO: especificar un poco más qué datasets y qué sistemas de almacenamiento concreto se van a usar.
 

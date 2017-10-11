@@ -87,7 +87,7 @@ Se suele utilizar para procesamiento batch de ficheros almacenados en HDFS.
 Impala
 ^^^^^^
 
-Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop, originalmente desarrollado por Cloudera.
+Apache Impala es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop, originalmente desarrollado por Cloudera.
 
 Apache Impala es compatible con HiveQL y utiliza la misma base de datos de metadatos para acceder a HDFS que Hive, pero a diferencia de este, cuenta con un modelo de procesamiento en memoria de baja latencia que permite realizar consultas interactivas orientadas a entornos *Business Intelligence*.
 
@@ -203,51 +203,22 @@ Oracle
 - Autenticación
 - Tipo de licencia/propietario
 
-MemSQL
-^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
-
-Teradata
-^^^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
-
-SAP Hana
-^^^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
 
 Tabla resumen
 -------------
 
 - Sistemas de almacenamiento y procesamiento distribuido
-  - Hadoop
-    - HDFS
-    - SQL: Hive, Impala
-    - Sobre Hive hablar de todas las distribuciones (AWS, Cloudera, Horton, MapR)
-  - NoSQL
-    - Cassandra
-    - MongoDB
-  - Spark
-    - SQL
-  - Otros: 
-    - Elastic Search/Solr
-    - BigQuery
-    - Redshift
-    - Oracle
+    - Hadoop
+      - HDFS
+      - SQL: Hive, Impala
+      - Sobre Hive hablar de todas las distribuciones (AWS, Cloudera, Horton, MapR)
+    - NoSQL
+      - Cassandra
+      - MongoDB
+    - Spark
+      - SQL
+    - Otros: 
+      - Elastic Search/Solr
+      - BigQuery
+      - Redshift
+      - Oracle
