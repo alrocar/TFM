@@ -11,11 +11,11 @@ Desarrollo del trabajo y resultados obtenidos
         - ODBC drivers
 
 
-De acuerdo a la metodología definida en el apartado a interior, en este apartado se incluye el desarrollo de la misma para cada uno de los sistemas de almacenamiento big data objetivo de ser integrados con CARTO.
+De acuerdo a la metodología definida en el apartado a interior, en este apartado se incluye el desarrollo de la misma para cada uno de los sistemas de almacenamiento Big Data objetivo de ser integrados con CARTO.
 
 El objetivo es contar con un procedimiento sistemático que incluya al menos las siguientes fases, para cada sistema de almacenamiento:
 
-1. Despliegue de un entorno de prueba del sistema de almacenamiento big data
+1. Despliegue de un entorno de prueba del sistema de almacenamiento Big Data
 2. Búsqueda, instalación y prueba de un driver ODBC compatible
 3. Búsqueda, instalación y prueba de un Foreign Data Wrapper (opcionalmente se puede utilizar la implementación base de PostgreSQL o implementar una propia)
 4. Desarrollo de un conector para CARTO
@@ -422,7 +422,7 @@ Una vez más, la petición a la API de importación de CARTO es análoga a la de
 Antes de continuar
 ------------------
 
-Antes de continuar con el desarrollo de los siguientes conectores big data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemático para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
+Antes de continuar con el desarrollo de los siguientes conectores Big Data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemático para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
 
 - Tienen un Driver ODBC
 - Soportan SQL como lenguaje de procesamiento

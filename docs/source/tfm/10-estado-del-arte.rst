@@ -3,7 +3,7 @@
 Estado del arte
 ===============
 
-En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento big data para los que se van a realizar conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
+En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento Big Data para los que se van a realizar conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
 
 Conceptos previos
 -----------------
@@ -24,10 +24,10 @@ Características:
 - Datos estructurados
 
 
-Sistemas de almacenamiento y procesamiento big data
+Sistemas de almacenamiento y procesamiento Big Data
 ---------------------------------------------------
 
-En este trabajo se estudian los siguientes sistemas de almacenamiento y procesamiento big data:
+En este trabajo se estudian los siguientes sistemas de almacenamiento y procesamiento Big Data:
 
 - Apache Hive
 - Impala
@@ -62,7 +62,7 @@ Sin embargo, el objetivo es doble:
 
 1. Por una parte, contar con una visión general de los sistemas con los que se va a trabajar.
 2. Por otra parte, poder identificar similitudes y diferencias entre ellos.
-3. Por último, dar soporte al mayor número posible de tecnologías de almacenamiento y procesamiento big data, especialmente aquellas de carácter libre.
+3. Por último, dar soporte al mayor número posible de tecnologías de almacenamiento y procesamiento Big Data, especialmente aquellas de carácter libre.
 
 Apache Hive
 ^^^^^^^^^^^
@@ -158,7 +158,7 @@ Se suele utilizar en entornos donde se requiere integración con otros servicios
 Cassandra
 ^^^^^^^^^
 
-Apache Cassanda es un sistema de almacenamiento big data de la familia de bases de datos NoSQL, en este caso orientada a columnas.
+Apache Cassanda es un sistema de almacenamiento Big Data de la familia de bases de datos NoSQL, en este caso orientada a columnas.
 
 Entre sus características destaca el estar orientada a la tolerancia a fallos y alta disponibilidad, además de escalar linealmente y ofrecer una baja latencia.
 

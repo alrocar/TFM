@@ -26,12 +26,12 @@ Definición del problema
 
 Estas organizaciones utilizan *CARTO* para importar sus datos y analizar la información que generan los distintos departamentos de manera conjunta, respondiendo a sus preguntas de negocio y encontrando además respuesta a otras preguntas que no se habían planteado en un principio.
 
-*CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a muchos de estos sistemas de almacenamiento big data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
+*CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a muchos de estos sistemas de almacenamiento Big Data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
 
 Objetivo
 --------
 
-El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para *CARTO* que permitan incluir en los cuadros de mandos (:ref:`dashboard`), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento big data:
+El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para *CARTO* que permitan incluir en los cuadros de mandos (:ref:`dashboard`), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento Big Data:
 
 - Apache Hive
 - Impala
@@ -45,7 +45,7 @@ El objetivo de este trabajo final de máster consiste en el desarrollo de conect
 - Amazon Aurora
 - Oracle
 
-Los "conectores big data para *CARTO*" permitirán a las organizaciones mantener sus actuales flujos de ingestión y procesamiento de información, además de aprovechar lo mejor de dos mundos: el almacenamiento y procesamiento distribuido que ofrecen algunas de estas herramientas orientadas a big data y la visualiación y análisis geoespacial de *CARTO*.
+Los "conectores Big Data para *CARTO*" permitirán a las organizaciones mantener sus actuales flujos de ingestión y procesamiento de información, además de aprovechar lo mejor de dos mundos: el almacenamiento y procesamiento distribuido que ofrecen algunas de estas herramientas orientadas a Big Data y la visualiación y análisis geoespacial de *CARTO*.
 
 Cabe destacar que los resultados de este trabajo no son de carácter teórico, sino que consiste en código fuente y herramientas que se incluirán en la distribución :ref:`on-premise` de *CARTO*
 
@@ -54,7 +54,7 @@ Organización de este trabajo final de máster
 
 Este trabajo final de máster está organizado en capítulos, siguiendo la siguiente estructura:
 
-1. :ref:`estado-del-arte`: Se repasan las herramientas de almacenamiento y procesamiento big data con las que se va a trabajar y se definen algunos de los conceptos teóricos que sirven de fundamentación para el trabajo.
+1. :ref:`estado-del-arte`: Se repasan las herramientas de almacenamiento y procesamiento Big Data con las que se va a trabajar y se definen algunos de los conceptos teóricos que sirven de fundamentación para el trabajo.
 2. :ref:`metodologia`: Definición de una metodología de trabajo sistemática y desglose en tareas del trabajo a realizar.
 3. :ref:`desarrollo`: Descripción de la implementación de cada uno de los conectores, demostración de uso, etc.
 4. :ref:`conclusiones`

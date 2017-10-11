@@ -6,9 +6,9 @@ Metodología y plan de trabajo
 Metodología
 -----------
 
-Como hemos visto en el estudio del estado del arte de los principales sistemas de almacenamiento big data, nos encontramos ante un ecosistema heterogéneo en cuanto a tipos de almacenamiento, procesamiento, despliegue, etc.
+Como hemos visto en el estudio del estado del arte de los principales sistemas de almacenamiento Big Data, nos encontramos ante un ecosistema heterogéneo en cuanto a tipos de almacenamiento, procesamiento, despliegue, etc.
 
-Aún siendo un ecosistema tan heterógeneo, es importante definir una metodología clara y sistemática en cuanto al desarrollo de conectores big data para CARTO. Esto es así, porque es de esperar que este campo siga evolucionando, surgiendo nuevas tecnologías y paradigmas a los que se deba dar soporte.
+Aún siendo un ecosistema tan heterógeneo, es importante definir una metodología clara y sistemática en cuanto al desarrollo de conectores Big Data para CARTO. Esto es así, porque es de esperar que este campo siga evolucionando, surgiendo nuevas tecnologías y paradigmas a los que se deba dar soporte.
 
 Así pues, en la definición de esta metodología sistemática, debemos encontrar un nexo de unión entre todos estos sistemas y CARTO.
 
@@ -30,18 +30,18 @@ El principal defecto de esta aproximación, consiste en la necesidad de realizar
 
 Aún así, CARTO puede ser instalado on-premises, con lo que las organizaciones celosas de abrir una conexión fuera de su infraestrucura, podrían aprovecharse de este modo de integración.
 
-Por último, y de nuevo haciendo referencia al estudio del estado del arte, hemos encontrado en todos los sistemas de almacenamiento big data dos puntos a favor de esta segunda aproximación:
+Por último, y de nuevo haciendo referencia al estudio del estado del arte, hemos encontrado en todos los sistemas de almacenamiento Big Data dos puntos a favor de esta segunda aproximación:
 
 - Todos los sistemas cuentan con driver ODBC
 - Todos los sistemas cuentan con interfaz SQL o implementación de Foreign Data Wrapper específica para PostgreSQL
 
-Con esto, podemos concluir que la utilización de Foreign Data Wrappers para conectar con sistemas de terceros, y en concreto, sistemas de almacenamiento big data, desde PostgreSQL es una solución factible y que además es susceptible de sistematizar.
+Con esto, podemos concluir que la utilización de Foreign Data Wrappers para conectar con sistemas de terceros, y en concreto, sistemas de almacenamiento Big Data, desde PostgreSQL es una solución factible y que además es susceptible de sistematizar.
 
 Con esta premisa, vamos a definir, una metodología, que se pueda probar y repetir, para conectar CARTO con Hive, Impala, Redshift, BigQuery, MongoDB y en definitiva, cualquier sistema de almacenamiento.
 
 Esta metodología consta de 5 fases, que se desarrollarán para cada sistema en la siguiente sección :ref:`desarrollo` y que se enumeran a continuación:
 
-1. Despliegue de un entorno de prueba del sistema de almacenamiento big data
+1. Despliegue de un entorno de prueba del sistema de almacenamiento Big Data
 2. Búsqueda, instalación y prueba de un driver ODBC compatible
 3. Búsqueda, instalación y prueba de un Foreign Data Wrapper (opcionalmente se puede utilizar la implementación base de PostgreSQL o implementar una propia)
 4. Desarrollo de un conector para CARTO
@@ -53,17 +53,17 @@ Plan de trabajo
 
 El trabajo final de máster consta de 3 grandes bloques en su desarrollo.
 
-1. Despliegue de distintos sistemas de almacenamiento big data en la nube de Amazon.
+1. Despliegue de distintos sistemas de almacenamiento Big Data en la nube de Amazon.
 2. Desarrollo de conectores para CARTO.
 3. Ingestión de datos de prueba y creación de un dashboard de visualización de datos geoespaciales con CARTO provenientes de uno o más de los sistemas implementados.
 
 
 El plan de trabajo detallado consiste en las siguientes tareas:
 
-Despliegue de sistemas de almacenamiento big data en la nube de Amazon
+Despliegue de sistemas de almacenamiento Big Data en la nube de Amazon
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Esta tarea consiste en explorar las diferentes alternativas para desplegar sistemas de almacenamiento big data en la nube.
+Esta tarea consiste en explorar las diferentes alternativas para desplegar sistemas de almacenamiento Big Data en la nube.
 
 El objetivo no es contar con despliegues robustos, resistentes a fallos o configurados en cluster, sino contar con diferentes entornos para realizar la ingestión de datos de prueba y conexión necesaria durante el desarrollo y demostración de los conectores para CARTO.
 
@@ -95,7 +95,7 @@ Para el desarrollo de deste bloque se realizan las siguientes tareas:
 Ingestión de datos de prueba y creación de dashboard con CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Una vez desplegados diferentes sistemas de almacenamiento big data en la nube, desarrollados los conectores y desplegada una instancia de CARTO, el último bloque consiste en realizar una pequeña demostración sobre un *dashboard* que consuma datos obtenidos de uno o más de estos sistemas desplegados.
+Una vez desplegados diferentes sistemas de almacenamiento Big Data en la nube, desarrollados los conectores y desplegada una instancia de CARTO, el último bloque consiste en realizar una pequeña demostración sobre un *dashboard* que consuma datos obtenidos de uno o más de estos sistemas desplegados.
 
 Para el desarrollo de deste bloque se realizan las siguientes tareas:
 
