@@ -625,3 +625,221 @@ Una vez más, la petición a la API de importación de CARTO es similar a la del
 En este caso, debido a la implementación de `mongo_fdw` debemos incluir un atributo más en la petición para definir las columnas de la tabla que queremos importar desde MongoDB a PostgreSQL (y en definitiva a CARTO).
 
 Nos encontramos en este caso, ante un conector para el que hemos tenido que instalar un Foreign Data Wrapper customizado, pero cuyo comportamiento en última instancia es similar a los anteriores, ya que podemos importar datos a CARTO con una simple petición a la API de importación.
+
+Integración de CARTO con Google BigQuery
+----------------------------------------
+
+Google BigQuery es el almacén de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
+
+El conector de Google BigQuery para CARTO es un ejemplo de implementación que utiliza autenticación OAuth y para la que además se ha desarrollado una interfaz de usuario.
+
+La integración de CARTO con Google BigQuery se va a realizar de acuerdo a los siguientes parámetros:
+
+- Soporta SQL: Sí
+- Driver ODBC: Sí
+- Compatible con `postgres_fdw`: Sí
+- Versión probada: 2.3.0
+- Autenticación: Google no proporciona información acerca del versionado de BigQuery, por tanto, las pruebas realizadas son con la versión actual a fecha Septiembre 2017
+- Distribución: SaaS
+- Despliegue: SaaS
+
+Despliegue de un entorno de prueba de Google BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+En contraposición a otros sistemas de base de datos, Google BigQuery es una base de datos SaaS completamente auto-gestionada por Google siguiendo el paradigma *serverless*. Así que para obtener un entorno de pruebas de Google BigQuery, simplemente debemos habilitarlo con nuestra cuenta de Google.
+
+Google ofrece una capa gratuita para BigQuery (a fecha septiembre de 2017), con unos límites más que suficientes para realizar pruebas y desarrollos: 1TB por mes en lecturas e importaciones/exportaciones ilimitadas.
+
+No se especifican detalles de cómo habilitar una cuenta de Google BigQuery, ya que es un procedimiento totalmente auto-descriptivo, desde la consola de administración de Google Cloud.
+
+Ingestión de datos en Google BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[TODO] -> Pantallazos de las interfaces e importación de CSV
+
+Instalación y prueba de un driver ODBC Google BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Google proporciona un driver ODBC oficial para Google BigQuery, desarrollado por un proveedor externo, Simba. El procedimiento de instalación es similar al de otros drivers ODBC que hemos visto en esta sección (Hive, Impala, Redshift, etc.)
+
+::
+
+    wget https://storage.googleapis.com/simba-bq-release/odbc/SimbaODBCDriverforGoogleBigQuery64-2.0.6.1011.tar.gz
+    tar zxvf SimbaODBCDriverforGoogleBigQuery64-2.0.6.1011.tar.gz -C /opt
+    chown postgres:postgres /opt/simba
+
+Configuración del driver ODBC para Hive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Una vez descargado el driver ODBC para GoogleBigQuery es necesario editar los archivos que PostgreSQL utiliza para conocer los drivers disponibles en el sistema.
+
+La ubicación de los archivos de configuración se puede obtener ejecutando la siguiente instrucción:
+
+::
+
+    [root@localhost vagrant]# odbcinst -j
+        unixODBC 2.3.4
+        DRIVERS............: /opt/carto/postgresql/embedded/etc/odbcinst.ini
+        SYSTEM DATA SOURCES: /opt/carto/postgresql/embedded/etc/odbc.ini
+        FILE DATA SOURCES..: /opt/carto/postgresql/embedded/etc/ODBCDataSources
+        USER DATA SOURCES..: /root/.odbc.ini
+        SQLULEN Size.......: 8
+        SQLLEN Size........: 8
+        SQLSETPOSIROW Size.: 8
+
+El comando `odbcinst` lo provee el paquete `unixODBC` que viene instalado por defecto en la distribución on-premise de CARTO.
+
+Una vez conocemos la ubicación de los archivos de configuración, añadimos el driver de Hive a la lista de drivers disponibles:
+
+::
+
+    printf "\n[BigQuery]
+    Description = Simba ODBC Driver for Google BigQuery (64-bit)
+    Driver = /opt/simba/googlebigqueryodbc/lib/64/libgooglebigqueryodbc_sb64.so" >> /data/production/config/postgresql/odbcinst.ini
+
+Para el caso de BigQuery es necesario habilitar OAuth a nivel de driver. Hay `dos modos de funcionamiento`_: TODO add reference
+
+.. _dos modos de funcionamiento: https://cloud.google.com/bigquery/docs/authentication/
+
+- Autenticación de usuario: Autentica contra una cuenta de usuario de Google obteniendo un `refresh token` que es temporal
+- Autenticación de servicio: Autentica una aplicación a través de una *clave privada de servicio*, clave que debe ser descargada desde la consola de autenticación de Google Cloud.
+
+Para este caso concreto, vamos a utilizar una clave privada .p12, dejándola en `/opt` en el servidor donde hemos descargado el driver ODBC y tenemos instalado PostgreSQL:
+
+TODO -> poner esto bien  `Google Cloud authentication console`_
+
+.. _Google Cloud authentication console: https://cloud.google.com/docs/authentication/getting-started
+
+::
+
+    [root@localhost vagrant]# ls -lh /opt
+    total 20K
+    drwxrwxr-x  12 root     root     4.0K Aug 24 11:07 carto
+    drwxr-xr-x   4 root     root     4.0K Sep  1 13:38 cloudera
+    drwxr-xr-x.  2 root     root     4.0K Mar 26  2015 rh
+    drwxr-xr-x   3 postgres postgres 4.0K Dec 12  2016 simba
+    -rw-r--r--   1 root     root     2.5K Sep  4 09:03 test-d58ed25bb6f7.p12
+
+Instalación y prueba de un Foreign Data Wrapper para Google BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Una primera aproximación a la hora de probar un Foreign Data Wrapper para Hive, consiste en probar la implementación base disponible en PostgreSQL `postgres_fdw`.
+
+En este caso, el driver ODBC de Google BigQuery es compatible con `postgres_fdw` del que CARTO cuenta con una implementación base.
+
+Desarrollo de un conector de Google BigQuery para CARTO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+El desarrollo de un conector para Google BigQuery es un caso especial de conector ya que debemos tratar con el flujo de autenticación de OAuth.
+
+Por ese motivo se van a relizar 3 aproximaciones:
+
+1. Utilización de la actual implementación de `odbc_fdw` para autenticación de usuario.
+2. Utilización de la actual implementación de `odbc_fdw` para autenticación de servicio.
+3. Desarrollo de un conector personalizado para gestionar el flujo de OAuth.
+
+Las dos primeras aproximaciones no necesitan código fuente, ya que se basan en la utilización de `odbc_fdw` ya disponible en CARTO. Como desventaja, se deja del lado del usuario la gestión del flujo OAuth para obtener un token de usuario.
+
+Aún así, en la siguiente sección veremos ejemplos de uso.
+
+Por otra parte, se desarrolla un conector personalizado para gestionar el flujo de OAuth y la conexión a Google BigQuery, todo integrado desde la interfaz de usuario.
+
+El código del conector se puede encontrar en el archivo `biquery.rb` disponible en el anexo xxx [TODO]
+
+Specially you may want to take a look at the `backend implementation`_
+
+.. _backend implementation: https://github.com/CartoDB/cartodb/blob/bq-connector/lib/carto/connector/providers/bigquery.rb
+
+TODO -> completar bien esto
+
+.. _script: https://github.com/CartoDB/onpremises/blob/onpremises-ts/tools/builder/carto-builder-bigquery.sh
+
+Usage of the `carto-builder-bigquery.sh` script:
+
+::
+
+    Usage: carto-builder-bigquery.sh [-h] [-o|--organization organization] [-c|--client-id clientId] [-s|--client-secret clientSecret] [-e|--email email] [-k|--key-file-path KeyFilePath]
+
+See `this deliverable`_ for more details
+
+.. _this deliverable: https://docs.google.com/document/d/1ZMQgbP_HoMrytFx8TT0encSvLvgyb2HmI1lKi9MHqOA/edit#
+
+See `this issue`_ for even more details
+
+.. _this issue: https://github.com/CartoDB/solutions/issues/1243
+
+Ingestion de datos desde Google BigQuery a CARTO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Como se ha comentado en la sección anterior, se proporcionan tres modos de conectar a Google BigQuery desde CARTO.
+
+1. Utilizando autenticación de servicio
+
+::
+
+    curl -v -k -H "Content-Type: application/json"   -d '{
+      "connector": {
+        "provider": "odbc",
+        "connection": {
+          "Driver": "BigQuery",
+          "OAuthMechanism": 0,
+          "Catalog": "eternal-ship-170218",
+          "SQLDialect": 1,
+          "Email": "odbc-443@eternal-ship-170218.iam.gserviceaccount.com",
+          "KeyFilePath": "/opt/test-d58ed25bb6f7.p12"
+        },
+        "table": "order_items",
+        "sql_query": "select * from `eternal-ship-170218.test.test` limit 1;"
+      }
+    }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
+
+
+2. Utilizando autenticación de usuario
+
+En este modo de funcionamiento, el usuario debe gestionar su token de OAuth de la siguiente manera:
+
+En primer lugar, generando unas claves pública y privada para OAuth TODO add link
+
+.. _OAuth client id: https://console.cloud.google.com/apis/credentials
+
+A continuación, editando el archivo `simba.googlebigqueryodbc.ini` incluyendo las claves de acceso.
+
+Se debe obtener un token de Oauth con la siguiente instrucción:
+
+::
+
+    https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/bigquery&response_type=code&redirect_uri=urn:ietf:wg:oauth:2.0:oob&client_id=YOUR_CLIENT_ID&hl=en&from_login=1&as=76356ac9e8ce640b&pli=1&authuser=0
+
+Para por último utilizar el script `get_refresh_token.sh` junto con el token de OAuth y las claves de autenticación generadas, para obtener el `refresh token` que se debe incluir en cada petición a Google BigQuery.
+
+::
+
+    ./get_refresh_token.sh AUTHENTICATION_TOKEN
+
+Una vez disponemos de un `refresh token` se puede utilizar la API de importación de CARTO de la siguiente manera.
+
+::
+
+    curl -v -k -H "Content-Type: application/json"   -d '{
+      "connector": {
+        "provider": "odbc",
+        "connection": {
+          "Driver": "BigQuery",
+          "OAuthMechanism": 1,
+          "Catalog": "eternal-ship-170218",
+          "SQLDialect": 1,
+          "RefreshToken": "1/nW8ZTOOrDHEuazfajXszSgd2b_X4cKSWM6xulLiP0rykdv-VHAzJTWLiXLi81VFu,"
+        },
+        "table": "order_items",
+        "sql_query": "select * from `eternal-ship-170218.test.test` limit 1;"
+      }
+    }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
+::
+
+En ambos casos, las peticiones a la API de importación son ligeramente diferentes a las que vimos en los conectores para Hive, Impala, Redshift o MongoDB. El motivo es que Google BigQuery necesita de parámetros adicionales, por tanto utilizamos una implementación genérica de FDW para drivers ODBC.
+
+Sin embargo, el modo de funcionamiento es exactamente el mismo. Tanto los parámetros de conexión como el atributo `sql_query` se envían al *backend* de CARTO.
+
+Este crea las entidades necesarias en PostgreSQL para hacer una conexión a Google BigQuery a través de un FDW que en última instancia utiliza el driver ODBC para realizar la consulta SQL con los parámetros de autenticación necesarios.
+
+Dicho esto, se adjunta una captura del modo de funcionamiento del conector de Google BigQuery desde la interfaz de usuario de CARTO. En este caso, el flujo de autenticación OAuth se hace desde la propia interfaz y una vez obtenido el token, se realiza una llamada a la API de importación con autenticación de usuario, tal y como hemos visto en esta sección.
