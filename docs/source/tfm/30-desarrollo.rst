@@ -430,3 +430,198 @@ Antes de continuar con el desarrollo de los siguientes conectores big data para 
 
 Tal y como hemos visto en las secciones anteriores, el desarrollo de conectores para Hive, Impala y Redshift es completamente análogo, por tanto, el mismo procedimiento sería válido para sistemas de almacenamiento que cumplan las 3 características mencionadas en esta sección.
 
+Integración de CARTO con MongoDB
+--------------------------------
+
+MongoDB es una base de datos orientada a objetos que pertenece a la familia de bases de datos NoSQL. Se suele utilizar como base de datos operacional y es muy popular en entornos JavaScript.
+
+- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de procesamiento: Interactivo.
+- Tipo de despliegue/distribución: on-premises
+- Interfaces de programación/consulta: Javascript (nativo) y otros SDK con lenguajes varios.
+- Autenticación: Usuario y contraseña, Kerberos/LDAP
+- Tipo de licencia/propietario: AGPL v3.0
+- Versión actual: 3.4
+- Driver ODBC: Sí
+
+La integración de CARTO con Apache Redshift se va a realizar de acuerdo a los siguientes parámetros:
+
+- Soporta SQL: No
+- Driver ODBC: Sí
+- Compatible con `postgres_fdw`: No
+- Versión probada: 3.4
+- Autenticación: Usuario y contraseña
+- Distribución: Imagen de Docker
+- Despliegue: Docker sobre AWS
+
+Despliegue de un entorno de prueba de MongoDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Para el despliegue de una instancia de MongoDB vamos a utilizar la siguiente imagen -> TODO https://hub.docker.com/r/tutum/mongodb/
+
+Ejecutamos el script de arranque del contenedor de MongoDB sobre una instancia de EC2:
+
+::
+
+    docker run --name mongo --network=host -d -p 27017:27017 -p 28017:28017 tutum/mongodb
+
+En este caso concreto, al arrancar la imagen de Docker utilizada, se crea un usuario y contraseña para acceder a la instancia de MongoDB. Para conocer el password del usuario administrador, debemos esperar a que termine de arrancar el contenedor e imprimir los logs de esta manera:
+
+En primer lugar, obtener el ID del contenedor:
+
+::
+
+    $ docker ps
+    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+    971d9c6bb9e3        tutum/mongodb       "/run.sh"           21 seconds ago      Up 18 seconds                           mongo
+
+A continuación utilizar el comando `docker logs <CONTAINER ID>`, hasta obtener una salida similar a esta:
+
+::
+
+    $ docker logs 971d9c6bb9e3
+    ========================================================================
+    You can now connect to this MongoDB server using:
+
+        mongo admin -u admin -p Ck15KQ2G4pdl --host <host> --port <port>
+
+    Please remember to change the above password as soon as possible!
+    ========================================================================
+
+Ingestión de datos en MongoDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Una vez hemos obtenido las credenciales de usuario administrador en el anterior paso, podemos crear una base de datos de prueba que utilizaremos para desarrollar el conector para MongoDB sobre CARTO.
+
+::
+
+    # open a bash session in the Docker container
+    docker exec -it mongo /bin/bash
+    # and then create a collection in the admin database
+    mongo -u admin -p Ck15KQ2G4pdl --authenticationDatabase 'admin'
+    use admin
+    db.createCollection("warehouse")
+
+Instalación y prueba de un Foreign Data Wrapper para MongoDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A diferencia de lo que ocurría en los casos de Hive, Impala o Redshift, el driver ODBC de MongoDB no es compatible con `postgres_fdw`, por tanto, nos encontramos con un caso en que debemos utilizar un Foreignd Data Wrapper específico.
+
+Esto tiene sentido ya que MongoDB, es una base de datos NoSQL orientada a objetos sin interfaz SQL, por tanto la implementación de un foreign data wrapper debe ser diferente.
+
+A la hora de elegir un FDW para MongoDB valoramos las opciones listadas en el wiki oficial de PostgreSQL [TODO] -> https://wiki.postgresql.org/wiki/Foreign_data_wrappers.
+
+Entre la lista, nos encontramos con dos FDW desarrollados con Multicorn [TODO] -> link y uno desarrollado de manera nativa en C. Accediendo al código fuente de los repositorios, vemos que el más activo es el FDW nativo, por tanto, lo seleccionamos como candidato para conectar a MongoDB desde PostgreSQL.
+
+TODO -> ADD LINK 
+.. _this one: https://github.com/EnterpriseDB/mongo_fdw
+
+Las instrucciones de instalación a fecha septiembre de 2017 de `mongo_fdw` no resultan al 100% correctas, por tanto, adjuntamos a continuación los pasos necesarios para realizar la instalación, configuración y prueba del mismo sobre CentOS 6.9
+
+*Procedemos a ejecutar los siguientes comandos como root en la misma máquina donde tenemos PostgreSQL instalado*
+
+
+En primer lugar, hay que satisfacer algunas dependencias del sistema:
+
+::
+
+    yum install -y openssl-devel patch
+
+La instalación de `mongo_fdw` sólo funciona con una versión de `gcc` 4.8 o superior:
+
+::
+
+    wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+    yum install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran -y
+    scl enable devtoolset-2 bash
+
+Debemos asegurarnos que la versión de gcc instalada es la correcta (4.8 o superior):
+
+::
+
+    $ gcc --version
+    gcc (GCC) 4.8.2 20140120 (Red Hat 4.8.2-15)
+
+Descargar la última release de `mongo_fdw`, en nuestro caso la 5.0.0 compatible con CentOS:
+
+::
+
+    wget https://github.com/EnterpriseDB/mongo_fdw/archive/REL-5_0_0.tar.gz
+    tar zxvf REL-5_0_0.tar.gz
+    cd mongo_fdw-REL-5_0_0
+
+A fecha de septiembre de 2017, hay un bug en una de las dependencias de `mongo_fdw` [TODO] -> See `this pull request`_.
+
+.. _this pull request: https://github.com/EnterpriseDB/mongo_fdw/pull/79/files
+
+Aplicamos el parche manualmente, sobre el archivo `autogen.sh`
+
+A continuación compilamos e instalamos el driver nativo para MongoDB y todas las librerías necesarias:
+
+::
+
+    export CFLAGS=-fPIC
+    export CXXFLAGS=-fPIC
+    ./autogen.sh --with-master
+    wget https://github.com/mongodb/mongo-c-driver/releases/download/1.6.3/mongo-c-driver-1.6.3.tar.gz
+    tar zxvf mongo-c-driver-1.6.3.tar.gz
+    cd mongo-c-driver-1.6.3
+    ./configure --prefix=/usr --libdir=/usr/lib64
+    make && make install
+    cd ..
+    make && make install
+
+Llegados a este punto, debemos ser capaces de probar el FDW `mongo_fdw` directamente desde la consola `psql` ejecutando las siguientes instrucciones:
+
+::
+    psql -U postgres
+    CREATE EXTENSION mongo_fdw;
+    CREATE SERVER mongo_server
+         FOREIGN DATA WRAPPER mongo_fdw
+         OPTIONS (address '192.168.99.100', port '27017');
+    CREATE USER MAPPING FOR postgres
+         SERVER mongo_server
+         OPTIONS (username 'admin', password 'Ck15KQ2G4pdl');
+    CREATE FOREIGN TABLE warehouse(
+        _id NAME,
+        warehouse_id int,
+        warehouse_name text,
+        warehouse_created timestamptz)
+        SERVER mongo_server
+            OPTIONS (database 'admin', collection 'warehouse');
+    INSERT INTO warehouse values (0, 1, 'UPS', '2014-12-12T07:12:10Z');
+    SELECT * FROM warehouse WHERE warehouse_id = 1;
+
+*Reemplazar los attributos `address`, `password`, etc. de acuerdo a la instancia local de MongoDB*
+
+Desarrollo de un conector de MongoDB para CARTO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+El código del conector `mongo.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+
+Ingestion de datos desde MongoDB a CARTO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Una vez más, la petición a la API de importación de CARTO es similar a la del caso de Hive e Impala.
+
+::
+
+    curl -v -k -H "Content-Type: application/json"   -d '{
+      "connector": {
+        "provider": "mongo",
+        "connection": {
+          "username":"admin",
+          "password":"Ck15KQ2G4pdl",
+          "server": "192.168.99.100",
+          "database": "admin",
+          "port":"27017",
+          "schema": "warehouse"
+        },
+        "table": "warehouse",
+        "columns": "_id NAME,   warehouse_id int,   warehouse_name text,   warehouse_created timestamptz"
+      }
+    }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
+
+En este caso, debido a la implementación de `mongo_fdw` debemos incluir un atributo más en la petición para definir las columnas de la tabla que queremos importar desde MongoDB a PostgreSQL (y en definitiva a CARTO).
+
+Nos encontramos en este caso, ante un conector para el que hemos tenido que instalar un Foreign Data Wrapper customizado, pero cuyo comportamiento en última instancia es similar a los anteriores, ya que podemos importar datos a CARTO con una simple petición a la API de importación.
