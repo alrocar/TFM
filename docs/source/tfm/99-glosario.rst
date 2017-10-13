@@ -3,6 +3,27 @@
 Glosario
 ========
 
+.. _API:
+
+API
+---
+
+API es la abreviatura de “Interfaz de Programación de Aplicaciones” (Aplication Programming Interface en inglés). Es una “llave de acceso” a funciones que podemos utilizar de un servicio web provisto por un tercero, dentro de nuestra propia aplicación web, de manera segura y confiable.
+
+.. _backend:
+
+backend
+-------
+
+El backend es el conjunto de tecnologías que se encuentran del lado del servidor, es decir, se encargan de lenguajes como PHP, Python, .Net, Java, etc, interactuar con bases de datos, verificar manejos de sesiones de usuarios, montar la página en un servidor, etc.
+
+.. _business-intelligence:
+
+Business Intelligence
+---------------------
+
+Business Intelligence es el conjunto de metodologías, aplicaciones y tecnologías que permiten reunir, depurar y transformar datos de los sistemas transaccionales e información desestructurada (interna y externa a la compañía) en información estructurada, para su explotación directa (reporting, análisis OLTP / OLAP, alertas...) o para su análisis y conversión en conocimiento, dando así soporte a la toma de decisiones sobre el negocio
+
 .. _dashboard:
 
 dashboard
@@ -31,6 +52,13 @@ firewall
 
 Un *firewall* es un dispositivo de seguridad de la red que monitoriza el tráfico entrante y saliente y decide si debe permitir o bloquear un tráfico específico en función de un conjunto de restricciones de seguridad ya definidas.
 
+.. _frontend:
+
+frontend
+--------
+
+El frontend son todas aquellas tecnologías que corren del lado del cliente, es decir, todas aquellas tecnologías que corren del lado del navegador web, generalizandose mas que nada en tres lenguajes, Html , CSS Y JavaScript.
+
 .. _hdfs:
 
 HDFS
@@ -58,3 +86,24 @@ on-premise
 ----------
 
 En la empresa se llama solución on-premise a aquellos sistemas que son instalados en la propia empresa. Se trata de tener en “Casa” los servidores y el software que proporcionan un determinado servicio a la empresa. Soluciones tal y como puede ser un almacenamiento y gestión de archivos.
+
+.. _REST:
+
+REST
+----
+
+REST es cualquier interfaz entre sistemas que use HTTP para obtener datos o generar operaciones sobre esos datos en todos los formatos posibles, como XML y JSON
+
+.. _saas
+
+SaaS
+----
+
+El software como servicio (SaaS) permite a los usuarios conectarse a aplicaciones basadas en la nube a través de Internet y usarlas. SaaS ofrece una solución de software integral que se adquiere de un proveedor de servicios en la nube mediante un modelo de pago por uso.
+
+.. _SDK:
+
+SDK
+---
+
+Un SDK (Software Development Kit), o kit de desarrollo de software, es un conjunto de herramientas que ayudan a la programación de aplicaciones para un entorno tecnológico particular

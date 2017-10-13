@@ -15,13 +15,97 @@ Conceptos previos
 CARTO
 -----
 
-- Business Intelligence ~ Location Intelligence
-- CARTO: Arquitectura
-  - PostgreSQL/PostGIS como base de datos y framework de análisis 
+*CARTO* es una plataforma de :ref:`location-intelligence` que permite transformar datos geoespaciales en resultados de negocio.
 
-Características:
+A diferencia del :ref:`business-intelligence`, Location Intelligence es el conjunto de herramientas y metodologías que permiten extraer conocimiento y tomar decisiones de negocio a partir de datos geoespaciales.
 
-- Datos estructurados
+CARTO es una plataforma SaaS referente en este sector que permite de una manera sencilla e intuitiva la importación de conjuntos de datos con información geoespacial para crear a través de :ref:`dashboard`s y widgets mapas, con capacidades de análisis, filtrado, búsqueda y predicción.
+
+*CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a algunos de los principales sistemas de almacenamiento Big Data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
+
+Actualmente, *CARTO* cuenta con más de 300000 usuarios registrados y es usado por más de 2000 organizaciones de todo el mundo para tomar decisiones a partir de sus datos geolocalizados.
+
+Productos
+^^^^^^^^^
+
+En la actualidad, CARTO está formado por 4 productos:
+
+- BUILDER
+
+Una herramienta web de análisis para que analistas y usuarios de negocio que permite crear cuadros de mando accionables que se pueden compartir.
+
+- ENGINE
+
+Un conjunto de herramientas geoespaciales, servicios y APIs para el desarrollo de aplicaciones geoespaciales.
+
+- Location Data Services
+
+Mapas base, mapas vectoriales, servicios de geocodificación y cálculo de rutas que se pueden consumir fácilmente en BUILDER o integrar a través de ENGINE.
+
+- Data Observatory
+
+Servicios para enriquecimiento de datos, a través de fronteras, datos demográficos y otros conjuntos de datos para dar valor a los propios datos de los usuarios.
+
+Arquitectura
+^^^^^^^^^^^^
+
+El siguiente diagrama muestra la arquitectura de componentes de CARTO.
+
+[TODO] -> añadir imagen
+
+Tal y como se muestra en la figura, dependiendo del tipo de aplicación que un usuario consuma, se utilizan diferentes componentes de la arquitectura.
+
+En el cuadro naranja, encontramos el stack de CARTO que se despliega en la nube y al cual accede un usuario que se registra en el :ref:`saas` a través de https://www.carto.com
+
+Para el objetivo de este trabajo final de máster, vamos a obviar los casos de aplicaciones móviles o HTML5 y vamos a centrarnos en BUILDER.
+
+BUILDER está formado por un conjunto de tecnologías de :ref:`backend`, que están desplegadas en la nube de Amazon, Google o Azure (u :ref:`on-premise`) y un conjunto de tecnologías de :ref:`frontend` que se corresponden con librerías JavaScript que se ejecutan en el navegador.
+
+Dentro de las tecnologías :ref:`backend` encontramos las siguientes:
+
+- PostgreSQL y PostGIS
+
+PostgreSQL es una base de datos relacional con soporte a SQL estándar distribuida con licencia libre y código abierto. PostGIS es una extensión para PostgreSQL que añade soporte geoespacial a través de estructuras de datos (tipos, índices, etc.) y funciones.
+
+CARTO utiliza PostgreSQL y PostGIS para almacenamiento de la información geoespacial generada por los usuarios y para realizar los análisis geoespaciales que permiten construir cuadros de mandos, visualizar mapas, etc.
+
+El acceso a PostgreSQL y PostGIS está abierto a los usuarios a través del uso de las :ref:`API` de la plataforma.
+
+Las version actuales de PostgreSQL y PostGIS utilizados por CARTO son la 9.5.2 y 2.2 respectivamente.
+
+- APIs de la plataforma (maps, SQL, import, analysis, etc.)
+
+Las APIs de la plataforma son parte de las APIs ofrecidas por ENGINE y utilizadas a su vez por BUILDER y por aplicaciones móviles o HTML5 creadas por terceros.
+
+CARTO ofrece un conjunto amplio de APIs :ref:`REST`, JavaScript y :ref:`SDK`s de desarrollo en diferentes lenguajes. A continuación se describen las más relevantes para el trabajo:
+
+  - maps API: Permite obtener teselas de los datos almacenados en PostgreSQL
+  - SQL API: Permite realizar consultas SQL contra PostgreSQL y PostGIS y utilizar todas las funciones disponibles incluidas las de *Location Data Services* y *Data Obervatory*
+  - import API: Permite importar datos en formato geoespacial
+
+- Varnish
+
+Varnish es un acelerador de aplicaciones web, también conocido como servidor proxy de caché HTTP. Permite cachear peticiones HTTP y su contenido.
+
+- Nginx
+
+Nginx es un servidor web HTTP.
+
+- CDN
+
+Una Content Delivery Network (CDN o, en español, una “Red de distribución de contenido”) es un conjunto de servidores que contienen copias de una misma serie de contenidos (imágenes, vídeos, documentos, …) y que están ubicados en puntos diversos de una red para poder servir sus contenidos de manera más eficiente. [#f1]_
+
+- BUILDER
+
+BUILDER es una aplicación escrita en Ruby on Rails y JavaScript, que a través de las APIs de la plataforma permite a los usuarios finales:
+
+  - Gestionar sus datos geoespaciales
+  - Gestionar sus mapas
+  - Definir orígenes de datos con filtros y consultas SQL
+  - Definir simbología a través de CartoCSS
+  - Publicar mapas y embeberlos
+
+Todo esto, centrado en la experiencia de usuario a través de una interfaz de usuario atractiva y fácil de usar.
 
 
 Sistemas de almacenamiento y procesamiento Big Data
@@ -222,3 +306,5 @@ Tabla resumen
       - BigQuery
       - Redshift
       - Oracle
+
+.. [#f1] https://manueldelgado.com/que-es-una-content-delivery-network-cdn/ - octubre 2017
