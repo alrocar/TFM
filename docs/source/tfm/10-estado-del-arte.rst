@@ -225,6 +225,14 @@ Se suele utilizar en entornos donde se requiere integración con otros servicios
 Tabla resumen
 -------------
 
++----------------+-------------+---------------+-----------------+---------+-----------------+
+| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
++================+=============+===============+=================+=========+=================+
+| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
++----------------+-------------+---------------+-----------------+---------+-----------------+
+| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
++----------------+-------------+---------------+-----------------+---------+-----------------+
+
 - Sistemas de almacenamiento y procesamiento distribuido
     - Hadoop
       - HDFS
