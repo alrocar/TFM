@@ -12,7 +12,7 @@ CARTO
 
 A diferencia del :ref:`business-intelligence`, *Location Intelligence* es el conjunto de herramientas y metodologías que permiten extraer conocimiento y tomar decisiones de negocio a partir de datos geoespaciales.
 
-CARTO es una plataforma :ref:`saas` referente en este sector que permite de una manera sencilla e intuitiva la importación de conjuntos de datos con información geoespacial para crear a través de :ref:`dashboard`s y *widgets*, mapas con capacidades de análisis, filtrado, búsqueda y predicción de variables.
+*CARTO* es una plataforma :ref:`saas` referente en este sector que permite de una manera sencilla e intuitiva la importación de conjuntos de datos con información geoespacial para crear a través de :ref:`dashboard` y *widgets*, mapas con capacidades de análisis, filtrado, búsqueda y predicción de variables.
 
 *CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a algunos de los principales sistemas de almacenamiento Big Data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
 
@@ -70,7 +70,7 @@ Las version actuales de PostgreSQL y PostGIS utilizados por CARTO son la 9.5.2 y
 
 Las APIs de la plataforma son parte de las APIs ofrecidas por *ENGINE* y utilizadas a su vez por *BUILDER* y por aplicaciones móviles o HTML5 creadas por terceros.
 
-*CARTO* ofrece un conjunto amplio de APIs :ref:`REST`, JavaScript y :ref:`SDK`s de desarrollo en diferentes lenguajes. A continuación se describen las más relevantes para el trabajo:
+*CARTO* ofrece un conjunto amplio de APIs :ref:`REST`, JavaScript y :ref:`SDK` de desarrollo en diferentes lenguajes. A continuación se describen las más relevantes para el trabajo:
 
   - maps API: Permite obtener teselas de los datos almacenados en PostgreSQL
   - SQL API: Permite realizar consultas SQL contra PostgreSQL y PostGIS y utilizar todas las funciones disponibles incluidas las de *Location Data Services* y *Data Obervatory*
@@ -115,7 +115,7 @@ En este trabajo se estudian los siguientes sistemas de almacenamiento y procesam
 En esta sección se va a hacer una breve descripción de los sistemas mencionados atendiendo a las siguientes características:
 
 - Tipo de sistema: Si ofrece almacenamiento y procesamiento o sólo uno de ambos.
-- Tipo de procesamiento: Batch, interactivo, tiempo real, etc.
+- Tipo de procesamiento: Batch (latencia del orden de minutos), interactivo (latencia del orden de decenas de segundos), tiempo real (latencia del orden de pocos segundos), etc.
 - Tipo de despliegue/distribución: Nube pública, privada, SaaS, on-premises, etc.
 - Interfaces de programación/consulta: SQL, SDKs en diferentes lenguajes, APIs REST, etc.
 - Autenticación: Usuario y contraseña, HTTP/HTTPS, Kerberos/LDAP, OAuth, etc.
@@ -125,26 +125,26 @@ En esta sección se va a hacer una breve descripción de los sistemas mencionado
 
 Para el motivo de este trabajo, no es necesario conocer otros detalles como mecanismos de replicación, particionamiento, tolerancia a fallos, etc. ya que el objetivo no consiste en administrar este tipo de sistemas.
 
-Sin embargo, el objetivo es doble:
+Sin embargo, el objetivo es triple:
 
 1. Por una parte, contar con una visión general de los sistemas con los que se va a trabajar.
 2. Por otra parte, poder identificar similitudes y diferencias entre ellos.
-3. Por último, dar soporte al mayor número posible de tecnologías de almacenamiento y procesamiento Big Data, especialmente aquellas de carácter libre.
+3. Por último, abrir la puerta al soporte del mayor número posible de tecnologías de almacenamiento y procesamiento Big Data, especialmente aquellas de carácter libre.
 
 Apache Hive
 ^^^^^^^^^^^
 
-Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre HDFS de Hadoop y otros sistemas compatibles como Amazon S3, originalmente desarrollado por Facebook.
+Apache Hive es una infraestructura de almacenamiento y procesamiento de datos almacenados sobre :ref:`HDFS` de Hadoop [#f17]_ y otros sistemas compatibles como Amazon S3 [#f18]_, originalmente desarrollado por Facebook [#f19]_.
 
-Ofrece un lenguaje de consulta basado en SQL llamado HiveQL que convierte las consultas en trabajos MapReduce, Tez o Spark.
+Ofrece un lenguaje de consulta basado en SQL llamado *HiveQL* que convierte las consultas en trabajos MapReduce, Tez [#f20]_ o Spark [#f21]_.
 
-Actualmente, como gran parte de los sistemas batch es considerado un sistema *legacy*, aunque por otra parte es un sistema apliamente establecido en la industria que cuenta con gran cantidad de herramientas integradoras dentro del sistema Hadoop tales como: Pig, Sqoop, Flume, etc.
+Actualmente, como gran parte de los sistemas batch es considerado un sistema *legacy*, aunque por otra parte es un sistema apliamente establecido en la industria que cuenta con gran cantidad de herramientas integradoras dentro del sistema Hadoop tales como: Pig [#f22]_, Sqoop [#f23]_, Flume [#f24]_, etc.
 
 Se suele utilizar para procesamiento batch de ficheros almacenados en HDFS.
 
-- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de sistema: Procesamiento.
 - Tipo de procesamiento: Batch.
-- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Hortonworks, MapR)
+- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR [#f25]_, Cloudera [#f26]_, Hortonworks [#f27]_, MapR [#f28]_)
 - Interfaces de programación/consulta: HiveQL compatible con SQL
 - Autenticación: Usuario y contraseña, HTTP/HTTPS, Kerberos/LDAP
 - Tipo de licencia/propietario: Apache 2.0
@@ -160,11 +160,11 @@ Apache Impala es compatible con HiveQL y utiliza la misma base de datos de metad
 
 Se suele utilizar para procesamiento de ficheros almacenados HDFS con menor latencia que Hive y por tanto orientada a aplicaciones finales.
 
-- Tipo de sistema: Almacenamiento y procesamiento.
+- Tipo de sistema: Procesamiento.
 - Tipo de procesamiento: Interactivo.
-- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Oracle, MapR)
+- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Oracle [#29]_, MapR)
 - Interfaces de programación/consulta: HiveQL compatible con SQL
-- Autenticación: Usuario contraseña, Kerberos, Sentry
+- Autenticación: Usuario contraseña, Kerberos, otros
 - Tipo de licencia/propietario: Apache 2.0
 - Versión actual: 2.10.0
 - Driver ODBC: sí
@@ -175,7 +175,7 @@ Amazon Redshift
 
 Amazon Redshift es un almacén de datos rápido y completamente administrado que permite analizar todos los datos empleando de forma sencilla y rentable SQL estándar y las herramientas de Business Intelligence existentes.
 
-Forma parte de la familia de servicios web de Amazon, por tanto se integra con gran parte de sus servicios, como por ejemplo Amazon S3.
+Forma parte de la familia de servicios web de Amazon (AWS), por tanto se integra con gran parte de sus servicios, como por ejemplo Amazon S3.
 
 Se suele utilizar para almacenar y analizar datos en entornos donde es necesaria una alta integración con otros servicios de AWS.
 
@@ -191,9 +191,9 @@ Se suele utilizar para almacenar y analizar datos en entornos donde es necesaria
 MongoDB
 ^^^^^^^
 
-MongoDB es una base de datos orientada a objetos que pertenece a la familia de bases de datos NoSQL. Está diseñada para soportar escalabilidad, particionamiento, replicación, alta disponibilidad siendo de las primeras bases de datos NoSQL en ofrecer estas características y una de las más populares en la actualidad.
+MongoDB es una base de datos orientada a objetos que pertenece a la familia de bases de datos :ref:`nosql`. Está diseñada para soportar escalabilidad, particionamiento, replicación, alta disponibilidad siendo de las primeras bases de datos NoSQL en ofrecer estas características y una de las más populares en la actualidad.
 
-Se suele utilizar como base de datos operacional y es muy popular en arquitecturas MEAN, en las que tanto el front como el backend están desarrollados sobre Javascript.
+Se suele utilizar como base de datos operacional y es muy popular en arquitecturas :ref:`mean`, en las que tanto el front como el backend están desarrollados sobre Javascript.
 
 - Tipo de sistema: Almacenamiento y procesamiento.
 - Tipo de procesamiento: Interactivo.
@@ -209,7 +209,7 @@ Google BigQuery
 
 Google BigQuery es el almacén de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
 
-Google BigQuery es un sistema de almacenamiento con una arquitectura serverless y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage, el soporte de OAuth y acceso a través de API REST o SDKs en diferentes lenguajes.
+Google BigQuery es un sistema de almacenamiento con una arquitectura :ref:`serverless` y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage [#30]_, el soporte de OAuth [#31]_ y acceso a través de API REST o SDKs en diferentes lenguajes.
 
 Se suele utilizar en entornos donde se requiere integración con otros servicios de Google y en los que se pretende evitar el coste de mantenimiento de infraestructura.
 
@@ -225,29 +225,29 @@ Se suele utilizar en entornos donde se requiere integración con otros servicios
 Tabla resumen
 -------------
 
-+----------------+-------------+---------------+-----------------+---------+-----------------+
-| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
-+================+=============+===============+=================+=========+=================+
-| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
-+----------------+-------------+---------------+-----------------+---------+-----------------+
-| Característica | Apache Hive | Apache Impala | Amazon Redshift | MongoDB | Google BigQuery |
-+----------------+-------------+---------------+-----------------+---------+-----------------+
-
-- Sistemas de almacenamiento y procesamiento distribuido
-    - Hadoop
-      - HDFS
-      - SQL: Hive, Impala
-      - Sobre Hive hablar de todas las distribuciones (AWS, Cloudera, Horton, MapR)
-    - NoSQL
-      - Cassandra
-      - MongoDB
-    - Spark
-      - SQL
-    - Otros: 
-      - Elastic Search/Solr
-      - BigQuery
-      - Redshift
-      - Oracle
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Característica | Apache Hive   | Apache Impala | Amazon Redshift | MongoDB          | Google BigQuery |
++================+===============+===============+=================+==================+=================+
+| Tipo           | Procesamiento | Procesamiento | Almacenamiento  | Almacenamiento   | Almacenamiento  |
+| de sistema     |               |               | Procesamiento   | Procesamiento    | Procesmiento    |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Tipo de        | Batch         | Interactivo   | Interactivo     | Interactivo      | Interactivo     |
+| procesamiento  |               |               |                 |                  |                 |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Tipo de        | Nube          | Nube          | SaaS            | Nube             | SaaS            |
+| despliegue     | on-premises   | on-premises   |                 | on-premises      |                 |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Interfaces     | SQL           | SQL           | SQL             | SDKs, Javascript | API REST, SDKs  |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Autenticación  | Usuario       | Usuario       | Usuario         | Usuario          | OAuth 2.0       |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Versión        | 2.3.0         | 2.10.0        | -               | 3.4              | -               |
+| actual         |               |               |                 |                  |                 |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Licencia       | Libre         | Libre         | Propietario     | Libre            | Propietario     |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
+| Driver ODBC    | Sí            | Sí            | Sí              | Sí               | Sí              |
++----------------+---------------+---------------+-----------------+------------------+-----------------+
 
 .. [#f1] https://carto.com/ - octubre 2017
 .. [#f2] https://carto.com/builder/ - octubre 2017
@@ -265,3 +265,18 @@ Tabla resumen
 .. [#f14] https://aws.amazon.com/es/redshift/ - octubre 2017
 .. [#f15] https://www.mongodb.com/ - octubre 2017
 .. [#f16] https://cloud.google.com/bigquery/ - octubre 2017
+.. [#f17] http://hadoop.apache.org/ - octubre 2017
+.. [#f18] https://aws.amazon.com/es/s3/ - octubre 2017
+.. [#f19] https://facebook.com/ - octubre 2017
+.. [#f20] https://tez.apache.org/ - octubre 2017
+.. [#f21] https://spark.apache.org/ - octubre 2017
+.. [#f22] https://pig.apache.org/ - octubre 2017
+.. [#f23] https://sqoop.apache.org/ - octubre 2017
+.. [#f24] https://flume.apache.org/ - octubre 2017
+.. [#f25] https://aws.amazon.com/es/emr/ - octubre 2017
+.. [#f26] https://www.cloudera.com - octubre 2017
+.. [#f27] https://es.hortonworks.com/ - octubre 2017
+.. [#f28] https://mapr.com/ - octubre 2017
+.. [#f29] https://www.oracle.com/ - octubre 2017
+.. [#f30] https://cloud.google.com/storage/ - octubre 2017
+.. [#f31] https://oauth.net/ - octubre 2017

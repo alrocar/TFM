@@ -13,6 +13,8 @@ Bibliografía
 
 - CARTO, ¿Qué es Location Intelligence? https://carto.com/location-intelligence/ - último acceso octubre 2017
 
+- CampusMVP, ¿Qué es el stack MEAN? https://www.campusmvp.es/recursos/post/Que-es-el-stack-MEAN-y-como-escoger-el-mejor-para-ti.aspx - último acceso octubre 2017
+
 - Cisco, ¿Qué es un firewall? https://www.cisco.com/c/es_es/products/security/firewalls/what-is-a-firewall.html - último acceso octubre 2017
 
 - Francisco Javier Ruiz, 17 junio 2016. https://blog.dataprius.com/index.php/2016/06/17/on-premise-servidores-problemas-solucion-cloud/ - último acceso octubre 2017
@@ -29,9 +31,13 @@ Bibliografía
 
 - Sinnexus, ¿Qué es Business Intelligence? http://www.sinnexus.com/business_intelligence/ - último acceso octubre 2017
 
+- SolidQ, ¿Qué es MapReduce? http://blogs.solidq.com/es/big-data/que-es-mapreduce - último acceso octubre 2017
+
 - SumaCRM, ¿Qué es CRM? https://www.sumacrm.com/soporte/customer-relationship-management - último acceso septiembre 2017
 
 - TIC.portal, Definición de un sistema ERP. https://www.ticportal.es/temas/enterprise-resource-planning/que-es-sistema-erp - último acceso septiembre 2017
+
+- Unpocodejava, ¿Qué es una arquitectura serverless? https://unpocodejava.com/2016/06/22/que-es-una-arquitectura-serverless-y-aws-lambda/ - último acceso octubre 2017
 
 
 8. Bibliografía: referencias bibliográficas consultadas dispuestas por orden

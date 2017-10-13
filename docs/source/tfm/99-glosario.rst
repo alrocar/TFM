@@ -73,12 +73,33 @@ Location Intelligence
 
 Location intelligence es una metodología para transformar datos geolocalizados en resultados de negocio. Los datos gelocalizados pueden ser direcciones postales, coordenadas o puntos, líneas o polígonos.
 
+.. _mapreduce:
+
+MapReduce
+---------
+
+MapReduce es un framework que proporciona un sistema de procesamiento de datos paralelo y distribuido. Su nombre se debe a las funciones principales que son Map y Reduce.
+
+.. _mean:
+
+MEAN
+----
+
+Arquitectura de desarrollo de software para aplicaciones distribuidas utilizando el mismo lenguaje JavaScript en todas sus fases y capas. MEAN es el acrónimo formado por las iniciales de las cuatro tecnologías principales que entran en juego: MongoDB, Express, AngularJS y Node.js
+
 .. _nosql:
 
 NoSQL
 -----
 
 NoSQL es un término que describe las bases de datos no relacionales de alto desempeño. Las bases de datos NoSQL utilizan varios modelos de datos, incluidos los de documentos, gráficos, claves-valores y columnas.
+
+.. _oauth:
+
+OAuth
+-----
+
+
 
 .. _on-premise:
 
@@ -94,7 +115,7 @@ REST
 
 REST es cualquier interfaz entre sistemas que use HTTP para obtener datos o generar operaciones sobre esos datos en todos los formatos posibles, como XML y JSON
 
-.. _saas
+.. _saas:
 
 SaaS
 ----
@@ -107,3 +128,10 @@ SDK
 ---
 
 Un SDK (Software Development Kit), o kit de desarrollo de software, es un conjunto de herramientas que ayudan a la programación de aplicaciones para un entorno tecnológico particular
+
+.. _serverless:
+
+serverless
+----------
+
+Las arquitecturas serverless reemplazan a las máquinas virtuales de larga duración con una capacidad de computación efímera que se crea para resolver una petición y desaparece después de su uso.
