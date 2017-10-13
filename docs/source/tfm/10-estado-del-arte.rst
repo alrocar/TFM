@@ -104,25 +104,15 @@ Todo esto, centrado en la experiencia de usuario a través de una interfaz de us
 Sistemas de almacenamiento y procesamiento Big Data
 ---------------------------------------------------
 
-En este trabajo se estudian los siguientes sistemas de almacenamiento y procesamiento Big Data:
+En este trabajo se estudian los siguientes sistemas de almacenamiento y procesamiento Big Data, ya que son los sistemas más utilizadas por las actuales organizaciones que usan *CARTO* como plataforma de *Location Intelligence*:
 
-- Apache Hive
-- Impala
-- Amazon Redshift
-- MongoDB
-- Google BigQuery
+- Apache Hive [#f12]_
+- Apache Impala [#f13]_
+- Amazon Redshift [#f14]_
+- MongoDB [#f15]_
+- Google BigQuery [#f16]_
 
-- Cassandra
-- SparkSQL
-
-- Amazon Aurora
-- Oracle
-
-- MemSQL
-- Teradata
-- SAP Hana
-
-Como se puede observar de la lista, el ecosistema es muy amplio y como veremos a continuación, heterogéneo. Por lo que en esta sección se va a hacer una breve descripción de los mismos atendiendo a las siguientes características:
+En esta sección se va a hacer una breve descripción de los sistemas mencionados atendiendo a las siguientes características:
 
 - Tipo de sistema: Si ofrece almacenamiento y procesamiento o sólo uno de ambos.
 - Tipo de procesamiento: Batch, interactivo, tiempo real, etc.
@@ -232,55 +222,6 @@ Se suele utilizar en entornos donde se requiere integración con otros servicios
 - Tipo de licencia/propietario: Propietario (Google)
 - Driver ODBC: Sí
 
-Cassandra
-^^^^^^^^^
-
-Apache Cassanda es un sistema de almacenamiento Big Data de la familia de bases de datos NoSQL, en este caso orientada a columnas.
-
-Entre sus características destaca el estar orientada a la tolerancia a fallos y alta disponibilidad, además de escalar linealmente y ofrecer una baja latencia.
-
-Se suele utilizar como base de datos operacional, en sistemas con gran carga de datos en los que las consultas son indexables por pocas columnas.
-
-- Tipo de sistema: Almacenamiento y procesamiento.
-- Tipo de procesamiento: Interactivo.
-- Tipo de despliegue/distribución: on-premise
-- Interfaces de programación/consulta: CQL (Similar a SQL)
-- Autenticación: Usuario y contraseña
-- Tipo de licencia/propietario: Apache 2.0
-- Versión actual: 3.11.0
-- Driver ODBC: Sí
-
-SparkSQL
-^^^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
-
-Amazon Aurora
-^^^^^^^^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
-
-Oracle
-^^^^^^
-
-- Tipo de sistema
-- Tipo de procesamiento
-- Tipo de despliegue/distribución
-- Interfaces de programación/consulta
-- Autenticación
-- Tipo de licencia/propietario
-
-
 Tabla resumen
 -------------
 
@@ -311,3 +252,8 @@ Tabla resumen
 .. [#f9] https://nginx.org/ - octubre 2017
 .. [#f10] https://manueldelgado.com/que-es-una-content-delivery-network-cdn/ - octubre 2017
 .. [#f11] https://carto.com/docs/carto-engine/cartocss/ - octubre 2017
+.. [#f12] https://hive.apache.org/ - octubre 2017
+.. [#f13] https://impala.apache.org/ - octubre 2017
+.. [#f14] https://aws.amazon.com/es/redshift/ - octubre 2017
+.. [#f15] https://www.mongodb.com/ - octubre 2017
+.. [#f16] https://cloud.google.com/bigquery/ - octubre 2017

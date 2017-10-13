@@ -23,3 +23,15 @@ En concreto, este trabajo está relacionado con los siguientes contenidos tratad
 - Entornos de gestión Big Data: AWS, Azure, Hadoop, BigQuery, etc.
 - NoSQL: Cassandra, MongoDB
 - Técnicas y herramientas de visualización
+
+Trabajo futuro
+--------------
+
+Agradecimientos
+---------------
+
+ern
+goi
+da
+js
+ab
