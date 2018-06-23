@@ -162,7 +162,7 @@ Se suele utilizar para procesamiento de ficheros almacenados HDFS con menor late
 
 - Tipo de sistema: Procesamiento.
 - Tipo de procesamiento: Interactivo.
-- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones (Amazon EMR, Cloudera, Oracle [#29]_, MapR)
+- Tipo de despliegue/distribución: Nube pública y privada (on-premises) con multitud de distribuciones.
 - Interfaces de programación/consulta: HiveQL compatible con SQL
 - Autenticación: Usuario contraseña, Kerberos, otros
 - Tipo de licencia/propietario: Apache 2.0
@@ -209,7 +209,7 @@ Google BigQuery
 
 Google BigQuery es el almacén de datos en la nube de Google, totalmente administrado y apto para analizar petabytes de datos.
 
-Google BigQuery es un sistema de almacenamiento con una arquitectura :ref:`serverless` y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage [#30]_, el soporte de OAuth [#31]_ y acceso a través de API REST o SDKs en diferentes lenguajes.
+Google BigQuery es un sistema de almacenamiento con una arquitectura :ref:`serverless` y ofrecido a modo de SaaS. Entre sus características principales destaca la integración con otros servicios de Google como Google Cloud Storage [#f29]_, el soporte de OAuth [#f30]_ y acceso a través de API REST o SDKs en diferentes lenguajes.
 
 Se suele utilizar en entornos donde se requiere integración con otros servicios de Google y en los que se pretende evitar el coste de mantenimiento de infraestructura.
 
@@ -277,6 +277,5 @@ Tabla resumen
 .. [#f26] https://www.cloudera.com - octubre 2017
 .. [#f27] https://es.hortonworks.com/ - octubre 2017
 .. [#f28] https://mapr.com/ - octubre 2017
-.. [#f29] https://www.oracle.com/ - octubre 2017
-.. [#f30] https://cloud.google.com/storage/ - octubre 2017
-.. [#f31] https://oauth.net/ - octubre 2017
+.. [#f29] https://cloud.google.com/storage/ - octubre 2017
+.. [#f30] https://oauth.net/ - octubre 2017
