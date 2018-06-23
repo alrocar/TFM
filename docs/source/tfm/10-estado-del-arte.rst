@@ -64,7 +64,7 @@ PostgreSQL [#f6]_ es una base de datos relacional con soporte a SQL estándar di
 
 El acceso a PostgreSQL y PostGIS está abierto a los usuarios a través del uso de las :ref:`API` de la plataforma.
 
-Las version actuales de PostgreSQL y PostGIS utilizados por CARTO son la 9.5.2 y 2.2 respectivamente.
+Las version actuales de PostgreSQL y PostGIS utilizados por CARTO son la 10.0 y 2.4 respectivamente.
 
 - APIs de la plataforma (maps, SQL, import, analysis, etc.)
 
