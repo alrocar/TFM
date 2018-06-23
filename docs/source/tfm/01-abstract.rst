@@ -31,17 +31,20 @@ Estas organizaciones utilizan *CARTO* para importar sus datos y analizar la info
 Objetivo
 --------
 
-El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para *CARTO* que permitan incluir en los cuadros de mandos (:ref:`dashboard`), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento Big Data:
+El objetivo de este trabajo final de máster consiste en el desarrollo de conectores para *CARTO* que permitan incluir en los cuadros de mandos (:ref:`dashboard`), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento Big Data.
+
+El objetivo es encontrar un mecanismo fácilmente reproducible que permita en el futuro integrar otros sistemas de almacenamiento. Para el actual trabajo, el objetivo consiste en integrar al menos:
 
 - Apache Hive
 - Impala
-- Amazon Redshift
 - MongoDB
 - Google BigQuery
 
+Y describir un proceso que permitiera la integración de otros sistemas tales como:
+
+- Amazon Redshift
 - Cassandra
 - SparkSQL
-
 - Amazon Aurora
 - Oracle
 
