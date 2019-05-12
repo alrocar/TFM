@@ -3,7 +3,7 @@
 Estado del arte
 ===============
 
-En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento Big Data para los que se van a realizar conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
+En este capítulo se presenta un informe sobre los diferentes sistemas de almacenamiento y procesamiento Big Data para los que se va a dar soporte para la realización de conectores para CARTO y una breve definición de los conceptos teóricos que sirven de fundamentación para el trabajo.
 
 CARTO
 -----
@@ -14,6 +14,8 @@ A diferencia del :ref:`business-intelligence`, *Location Intelligence* es el con
 
 *CARTO* es una plataforma :ref:`saas` referente en este sector que permite de una manera sencilla e intuitiva la importación de conjuntos de datos con información geoespacial para crear a través de :ref:`dashboard` y *widgets*, mapas con capacidades de análisis, filtrado, búsqueda y predicción de variables.
 
+La plataforma, da soporte a todo el flujo de trabajo para el análisis de datos geoespaciales. Desde la ingestión de datos, enriquecimiento con nuevas fuentes de datos, análisis, visualización e integración.
+
 *CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a algunos de los principales sistemas de almacenamiento Big Data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
 
 Actualmente, *CARTO* cuenta con más de 300000 usuarios registrados y es usado por más de 2000 organizaciones de todo el mundo para tomar decisiones a partir de sus datos geolocalizados.
@@ -21,7 +23,11 @@ Actualmente, *CARTO* cuenta con más de 300000 usuarios registrados y es usado p
 Productos
 ^^^^^^^^^
 
-En la actualidad, CARTO está formado por 4 productos principales:
+En la actualidad, CARTO es una plataforma formada por multitud de APIs, librerías, soluciones y verticales. Para el objetivo de este trabajo nos vamos a centrar en  5 productos principales.
+
+.. image:: ../_static/products.png
+  :width: 800
+  :alt: Productos
 
 - BUILDER [#f2]_
 
@@ -39,16 +45,20 @@ Mapas base, mapas vectoriales, servicios de geocodificación y cálculo de rutas
 
 Servicios para enriquecimiento de datos, a través de fronteras, datos demográficos y otros conjuntos de datos para dar valor a los propios datos de los usuarios.
 
+- Data connectors [#f5b]_
+
+APIs para ingestión de datos en la plataforma
+
+
+
 Arquitectura
 ^^^^^^^^^^^^
 
-El siguiente diagrama muestra la arquitectura de componentes de *CARTO*.
+El siguiente diagrama muestra la arquitectura de componentes simplificada de *CARTO*.
 
-[TODO] -> añadir imagen
-
-Tal y como se muestra en la figura, dependiendo del tipo de aplicación que un usuario consuma, se utilizan diferentes componentes de la arquitectura.
-
-En el cuadro naranja, encontramos el stack de *CARTO* que se despliega en la nube y al cual accede un usuario que se registra en el :ref:`saas` a través de https://www.carto.com
+.. image:: ../_static/arch_simpl.png
+  :width: 800
+  :alt: Arquitectura simplificada
 
 Para el objetivo de este trabajo final de máster, vamos a obviar los casos de aplicaciones móviles o HTML5 y vamos a centrarnos en *BUILDER*.
 
@@ -99,6 +109,21 @@ Una Content Delivery Network (CDN o, en español, una “Red de distribución de
   - Publicar mapas y embeberlos
 
 Todo esto, centrado en la experiencia de usuario a través de una interfaz de usuario atractiva y fácil de usar.
+
+
+
+Tecnologías backend
+^^^^^^^^^^^^^^^^^^^
+
+En lo que se refiere a tecnologías backend, el siguiente diagrama muestra un resumen de frameworks a más bajo nivel dentro de *BUILDER*.
+
+.. image:: ../_static/tech.png
+  :width: 800
+  :alt: Tech
+
+Nos encontramos principalmente con dos frameworks de desarrollo: Por una parte, Rails [#f11b]_ que se utiliza para dos soporte a servicios y APIs para la gestión de datos, tablas, mapas, visualizaciones. Y por otra parte NodeJS [#f11c]_ que da soporte a APIs de alta carga de peticiones (varios cientos de millones de peticiones mensuales), para procesar, analizar y visualizar información geoespacial.
+
+Por último, como hemos visto antes tanto la información de usuario, se almacena en PostgreSQL y PostGIS para dar soporte geoespacial.
 
 
 Sistemas de almacenamiento y procesamiento Big Data
@@ -249,33 +274,36 @@ Tabla resumen
 | Driver ODBC    | Sí            | Sí            | Sí              | Sí               | Sí              |
 +----------------+---------------+---------------+-----------------+------------------+-----------------+
 
-.. [#f1] https://carto.com/ - octubre 2017
-.. [#f2] https://carto.com/builder/ - octubre 2017
-.. [#f3] https://carto.com/engine/ - octubre 2017
-.. [#f4] https://carto.com/location-data-services/ - octubre 2017
-.. [#f5] https://carto.com/data-observatory/ - octubre 2017
-.. [#f6] https://www.postgresql.org/ - octubre 2017
-.. [#f7] http://postgis.net/ - octubre 2017
-.. [#f8] https://varnish-cache.org/ - octubre 2017
-.. [#f9] https://nginx.org/ - octubre 2017
-.. [#f10] https://manueldelgado.com/que-es-una-content-delivery-network-cdn/ - octubre 2017
-.. [#f11] https://carto.com/docs/carto-engine/cartocss/ - octubre 2017
-.. [#f12] https://hive.apache.org/ - octubre 2017
-.. [#f13] https://impala.apache.org/ - octubre 2017
-.. [#f14] https://aws.amazon.com/es/redshift/ - octubre 2017
-.. [#f15] https://www.mongodb.com/ - octubre 2017
-.. [#f16] https://cloud.google.com/bigquery/ - octubre 2017
-.. [#f17] http://hadoop.apache.org/ - octubre 2017
-.. [#f18] https://aws.amazon.com/es/s3/ - octubre 2017
-.. [#f19] https://facebook.com/ - octubre 2017
-.. [#f20] https://tez.apache.org/ - octubre 2017
-.. [#f21] https://spark.apache.org/ - octubre 2017
-.. [#f22] https://pig.apache.org/ - octubre 2017
-.. [#f23] https://sqoop.apache.org/ - octubre 2017
-.. [#f24] https://flume.apache.org/ - octubre 2017
-.. [#f25] https://aws.amazon.com/es/emr/ - octubre 2017
-.. [#f26] https://www.cloudera.com - octubre 2017
-.. [#f27] https://es.hortonworks.com/ - octubre 2017
-.. [#f28] https://mapr.com/ - octubre 2017
-.. [#f29] https://cloud.google.com/storage/ - octubre 2017
-.. [#f30] https://oauth.net/ - octubre 2017
+.. [#f1] https://carto.com/ - mayo 2019
+.. [#f2] https://carto.com/builder/ - mayo 2019
+.. [#f3] https://carto.com/engine/ - mayo 2019
+.. [#f4] https://carto.com/location-data-services/ - mayo 2019
+.. [#f5] https://carto.com/data-observatory/ - mayo 2019
+.. [#f5b] https://carto.com/integrations/ - mayo 2019
+.. [#f6] https://www.postgresql.org/ - mayo 2019
+.. [#f7] http://postgis.net/ - mayo 2019
+.. [#f8] https://varnish-cache.org/ - mayo 2019
+.. [#f9] https://nginx.org/ - mayo 2019
+.. [#f10] https://manueldelgado.com/que-es-una-content-delivery-network-cdn/ - mayo 2019
+.. [#f11] https://carto.com/docs/carto-engine/cartocss/ - mayo 2019
+.. [#f11b] https://rubyonrails.org/ - mayo 2019
+.. [#f11c] https://nodejs.org/es/ - mayo 2019
+.. [#f12] https://hive.apache.org/ - mayo 2019
+.. [#f13] https://impala.apache.org/ - mayo 2019
+.. [#f14] https://aws.amazon.com/es/redshift/ - mayo 2019
+.. [#f15] https://www.mongodb.com/ - mayo 2019
+.. [#f16] https://cloud.google.com/bigquery/ - mayo 2019
+.. [#f17] http://hadoop.apache.org/ - mayo 2019
+.. [#f18] https://aws.amazon.com/es/s3/ - mayo 2019
+.. [#f19] https://facebook.com/ - mayo 2019
+.. [#f20] https://tez.apache.org/ - mayo 2019
+.. [#f21] https://spark.apache.org/ - mayo 2019
+.. [#f22] https://pig.apache.org/ - mayo 2019
+.. [#f23] https://sqoop.apache.org/ - mayo 2019
+.. [#f24] https://flume.apache.org/ - mayo 2019
+.. [#f25] https://aws.amazon.com/es/emr/ - mayo 2019
+.. [#f26] https://www.cloudera.com - mayo 2019
+.. [#f27] https://es.hortonworks.com/ - mayo 2019
+.. [#f28] https://mapr.com/ - mayo 2019
+.. [#f29] https://cloud.google.com/storage/ - mayo 2019
+.. [#f30] https://oauth.net/ - mayo 2019
