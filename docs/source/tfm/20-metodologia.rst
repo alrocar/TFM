@@ -3,8 +3,8 @@
 Metodología y plan de trabajo
 =============================
 
-Metodología
------------
+Introducción
+------------
 
 Como hemos visto en el estudio del estado del arte de los principales sistemas de almacenamiento Big Data, nos encontramos ante un ecosistema heterogéneo en cuanto a tipos de almacenamiento, procesamiento, despliegue, etc.
 
@@ -18,13 +18,31 @@ Así pues, en la definición de esta metodología sistemática, debemos encontra
 De acuerdo a la arquitectura de CARTO, la integración con sistemas de terceros se puede realizar a dos niveles:
 
 - Utilizando sus APIs, algunas de las cuales exponen interfaces para acceder directamente a todas las capacidades de PostgreSQL a través de SQL estándar.
-- Utilizando las capacidades de conectividad de PostgreSQL, tales como Foreign Data Wrappers.
+- Utilizando las capacidades de conectividad de PostgreSQL, tales como Foreign Data Wrappers [#f1]_ (FDWs).
+
+Una breve introducción a Foreign Data Wrappers (FDWs)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Antes de decidir qué aproximación vamos a utilizar para resolver el problema de conectar CARTO son sistemas de almacenamiento Big Data y ya que hemos mencionado FDWs como un solución válida para este problema, hagamos una pequeña introducción.
+
+Los Foreign Data Wrappers son una funcionalidad del core de PostgreSQL que permite a desarrolladores exponer fuentes de datos externas como si fueran tablas dentro de PostgreSQL.
+
+Para fuentes de datos que exponen tablas y un lenguaje de consulta SQL, FDWs actúa como un espejo de estos sistemas (Oracle, MySQL, etc.), para otros tipos de fuentes externas (APIs de redes sociales, CSVs, etc.) el FDW tiene que hacer esa conversión del modelo de datos y API de la fuente de datos de origen a tuplas de PostgreSQL.
+
+.. image:: ../_static/fdw.png
+  :width: 800
+  :alt: Foreign Data Wrappers
+
+En cualquier caso, un FDW hace que PostgreSQL actúe como una especie de *proxy* entre la aplicación cliente que está ejecutando SQLs contra PostgreSQL y la fuente de datos externa, que recibe estas peticiones y contesta en consecuencia. A la vista del cliente, está trabajando directamente contra PostgreSQL.
+
+APIs vs FDWs
+^^^^^^^^^^^^
 
 Analizando las virtudes y defectos de ambas aproximaciones nos encontramos con lo siguiente:
 
 A favor de la utilización de APIs como mecanismo de integración entre CARTO y otros sistemas está la flexibilidad. Estas APIs REST, se pueden utilizar en cualquier flujo de integración. Por otra parte, como inconveniente, nos encontramos con que se requieren desarrollos concretos para cada tipo de integración.
 
-La utilización de las capacidades nativas de PostgreSQL para conectarse con sistemas de terceros presenta a su vez ventajas e inconvenientes. Entre las ventajas, cabe destacar, que el framework de Foreign Data Wrappers, consiste en un marco bien definido y ampliamente utilizado en la industria, que además, en gran parte de sus implementaciones se basa en la utilización de drivers ODBC, un estándar conocido y muy extendido en los sistemas de bases de datos relacionales.
+La utilización de las capacidades nativas de PostgreSQL para conectarse con sistemas de terceros presenta a su vez ventajas e inconvenientes. Entre las ventajas, cabe destacar, que el framework de Foreign Data Wrappers, consiste en un marco bien definido y ampliamente utilizado en la industria, que además, en gran parte de sus implementaciones se basa en la utilización de drivers ODBC [#f2]_, un estándar conocido y muy extendido en los sistemas de bases de datos relacionales.
 
 El principal defecto de esta aproximación, consiste en la necesidad de realizar una conexión directa entre sistemas de bases de datos, en este caso, desde PostgreSQL a otros (tales como Hive, Impala, MongoDB, etc.). En algún caso, esto puede comprometer la seguridad de los sistemas de bases de datos.
 
@@ -36,6 +54,9 @@ Por último, y de nuevo haciendo referencia al estudio del estado del arte, hemo
 - Todos los sistemas cuentan con interfaz SQL o implementación de Foreign Data Wrapper específica para PostgreSQL
 
 Con esto, podemos concluir que la utilización de Foreign Data Wrappers para conectar con sistemas de terceros, y en concreto, sistemas de almacenamiento Big Data, desde PostgreSQL es una solución factible y que además es susceptible de sistematizar.
+
+Metodología
+-----------
 
 Con esta premisa, vamos a definir, una metodología, que se pueda probar y repetir, para conectar CARTO con Hive, Impala, Redshift, BigQuery, MongoDB y en definitiva, cualquier sistema de almacenamiento.
 
@@ -73,8 +94,6 @@ Para el desarrollo de este bloque se realizan las siguientes tareas:
 - Despliegue con Docker de Cloudera Quickstart para contar con instancias de Hive e Impala.
 - Despliegue de una instancia de Amazon Redshift.
 - Despliegue con Docker de una instancia de MongoDB.
-- Despliegue con Docker de una instancia de Cassandra.
-- Despliegue con Docker de una instancia de Oracle.
 - Configuración de una cuenta y credenciales para acceso a Google BigQuery.
 
 Desarrollo de conectores para CARTO
@@ -104,8 +123,6 @@ Para el desarrollo de deste bloque se realizan las siguientes tareas:
 - Creación de un dashboard de análisis y visualización de datos geoespaciales con CARTO provenientes de uno o más de los sistemas implementados.
 
 
-TODO: especificar un poco más qué datasets y qué sistemas de almacenamiento concreto se van a usar.
-
 Metodología de trabajo
 ----------------------
 
@@ -117,4 +134,6 @@ Una vez validado uno de estos sistemas de almacenamiento, se continúan realizan
 
 En última instancia, se trabaja en la ingestión de datos y creación del dashboard a modo de demostración.
 
-Por otra parte, como segundo objetivo metodológico, se pretende que todo el entorno sea fácilmente reproducible, así pues, se utilizan herramientas que facilitan la automatización y colaboración: Github, BASH, Vagrant, Docker, etc. Con lo que es posible reproducir todo el desarrollo realizado durante el trabajo final de máster.
+
+.. [#f1] https://carto.com/blog/postgres-fdw/ - mayo 2019
+.. [#f2] https://docs.microsoft.com/en-us/sql/odbc/reference/what-is-odbc?view=sql-server-2017 - mayo 2019
