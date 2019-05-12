@@ -474,3 +474,189 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 	        public: true
 	      }
 		}...
+
+.. _bigquery_conn:
+
+E. Código fuente de conector para BigQuery
+------------------------------------------
+
+::
+
+	# encoding: utf-8
+
+	require 'uri'
+	require_relative './odbc'
+
+	module Carto
+	  class Connector
+
+	    # {
+	    #   "provider": "bigquery",
+	    #   "connection": {
+	    #     "Driver": "Google BigQuery 64",
+	    #     "OAuthMechanism": 1,
+	    #     "Catalog": "eternal-ship-170218",
+	    #     "SQLDialect": 1,
+	    #     "RefreshToken": "1/FyCbmKonlYAwx7FMjfow9QO5mdiOG3u9dfpi0ktYxOux_fFDF6ip-PERQkXYKiDc"
+	    #   },
+	    #   "table": "destination_table",
+	    #   "sql_query": "select * from `eternal-ship-170218.test.test` limit 1;"
+	    # }
+	    class BigQueryProvider < OdbcProvider
+
+	      private
+
+	      DRIVER_NAME       = 'Google BigQuery 64'
+	      SQL_DIALECT       = 1
+	      USER_AUTH         = 1
+	      SERVICE_AUTH      = 0
+
+	      def initialize(context, params)
+	        super
+	        @oauth_config = Cartodb.get_config(:oauth, 'bigquery')
+	        validate_config!(context)
+	      end
+
+	      def validate_config!(context)
+	        raise 'OAuth configuration not found for bigquery provider' if @oauth_config.nil?
+	        if @oauth_config['oauth_mechanism'] === SERVICE_AUTH \
+	            and @oauth_config['email'].nil? \
+	            and @oauth_config['key'].nil?
+	          raise 'bigquery provider configured in SERVICE_AUTH mode but email or key not present'
+	        else
+	          begin
+	          @token = context.user.oauths.select('bigquery').token
+	          raise 'OAuth Token not found for bigquery provider' if @token.nil?
+	          rescue => e
+	            CartoDB::Logger.error(exception: e,
+	                                    message: 'OAuth Token not found for "bigquery" provider',
+	                                    user_id: context.user.id)
+	          end
+	        end
+	      end
+
+	      def fixed_connection_attributes
+	        oauth_mechanism = @oauth_config['oauth_mechanism']
+	        proxy_conf = create_proxy_conf
+
+	        if oauth_mechanism === SERVICE_AUTH
+	          conf = {
+	            Driver:         DRIVER_NAME,
+	            SQLDialect:     SQL_DIALECT,
+	            OAuthMechanism: oauth_mechanism,
+	            Email:          @oauth_config['email'],
+	            KeyFilePath:    @oauth_config['key']
+	          }
+	        else
+	          conf = {
+	            Driver:         DRIVER_NAME,
+	            SQLDialect:     SQL_DIALECT,
+	            OAuthMechanism: oauth_mechanism,
+	            RefreshToken:   @token
+	          }
+	        end
+
+	        if !proxy_conf.nil?
+	          conf = conf.merge(proxy_conf)
+	        end
+
+	        return conf
+	      end
+
+	      def required_connection_attributes
+	        {
+	          database:       :Catalog
+	        }
+	      end
+
+	      def create_proxy_conf
+	        proxy = ENV['HTTP_PROXY'] || ENV['http_proxy']
+	        if !proxy.nil?
+	          proxy = URI.parse(proxy)
+	          {
+	            ProxyHost: proxy.host,
+	            ProxyPort: proxy.port
+	          }
+	        end
+	      end
+
+	    end
+	  end
+	end
+
+.. _bigquery_conn_conf:
+
+F. Configuración del conector para BigQuery
+-------------------------------------------
+
+La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` presente en el archivo `cartodb/lib/carto/connector/providers.rb` del repositorio https://github.com/CartoDB/cartodb
+
+::
+
+	# encoding: utf-8
+
+	require_relative 'providers/generic_odbc'
+	require_relative 'providers/mysql'
+	require_relative 'providers/postgresql'
+	require_relative 'providers/sqlserver'
+	require_relative 'providers/hive'
+	require_relative 'providers/pg_fdw'
+
+	module Carto
+	  class Connector
+
+	    # Here we map provider identifiers (as used in APIs, etc.) to the Provider class and basic attributes.
+	    # `name` is the human-readable name
+	    # `public` means that the provider is publicly announced (so it is accessible through UI, visible in lists of
+	    # providers, etc.) A provider may be available or not (see Connector.limits) independently of its public status,
+	    # so that a public provider may not be available for all users, and non-public providers may be available to
+	    # some users (e.g. 'odbc' provider for tests)
+	    PROVIDERS = {
+		  'odbc' => {
+		    name: 'ODBC',
+		    class: GenericOdbcProvider,
+		    public: false # Intended for internal development/tests
+		  },
+		  'postgres' => {
+		    name: 'PostgreSQL',
+		    class: PostgreSQLProvider,
+		    public: true
+		  },
+		  'mysql' => {
+		    name: 'MySQL',
+		    class: MySqlProvider,
+		    public: true
+		  },
+		  'sqlserver' => {
+		    name: 'Microsoft SQL Server',
+		    class: SqlServerProvider,
+		    public: true
+		  },
+		  'hive' => {
+		    name: 'Hive',
+		    class: HiveProvider,
+		    public: true
+		  },
+		  'impala' => {
+		    name: 'Impala',
+		    class: GenericOdbcProvider,
+		    public: true
+		  },
+		  'redshift' => {
+		    name: 'Redshift',
+		    class: GenericOdbcProvider,
+		    public: true
+		  },
+		  'mongo' => {
+	        name: 'mongo',
+	        class: MongoProvider,
+	        public: true
+	      },
+	      'bigquery' => {
+	        name: 'Google BigQuery 64',
+	        class: BigQueryProvider,
+	        public: true
+	      }
+		}...
+
+	

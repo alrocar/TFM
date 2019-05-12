@@ -3,14 +3,6 @@
 Desarrollo del trabajo y resultados obtenidos
 =============================================
 
-6. Desarrollo del trabajo y resultados obtenidos.
-
-- CARTO: Arquitectura
-      - PostGIS
-        - FDW: pg_fdw or custom
-        - ODBC drivers
-
-
 De acuerdo a la metodología definida en el apartado a interior, en este apartado se incluye el desarrollo de la misma para cada uno de los sistemas de almacenamiento Big Data objetivo de ser integrados con CARTO.
 
 El objetivo es contar con un procedimiento sistemático que incluya al menos las siguientes fases, para cada sistema de almacenamiento:
@@ -20,12 +12,6 @@ El objetivo es contar con un procedimiento sistemático que incluya al menos las
 3. Búsqueda, instalación y prueba de un Foreign Data Wrapper (opcionalmente se puede utilizar la implementación base de PostgreSQL o implementar una propia)
 4. Desarrollo de un conector para CARTO
 5. Ingestión de datos hacia CARTO
-
-Conceptos previos
------------------
-
-- Cómo probar un FDW / compatibilidad con postgres_fdw
-- Cómo funciona unixODBC
 
 Integración de CARTO con Apache Hive
 ------------------------------------
@@ -254,7 +240,7 @@ Dicha instrucción se puede ejecutar directamente desde la consola de Impala dis
 Instalación y prueba de un driver ODBC para Impala
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-El procedimiento para instalar el driver ODBC para Impala es similar al de Hive [TODO] -> link a la sección correspondiente.
+El procedimiento para instalar el driver ODBC para Impala es similar al de Hive.
 
 ::
 
@@ -639,12 +625,41 @@ En contraposición a otros sistemas de base de datos, Google BigQuery es una bas
 
 Google ofrece una capa gratuita para BigQuery (a fecha mayo de 2019), con unos límites más que suficientes para realizar pruebas y desarrollos: 1TB por mes en lecturas e importaciones/exportaciones ilimitadas.
 
-No se especifican detalles de cómo habilitar una cuenta de Google BigQuery, ya que es un procedimiento totalmente auto-descriptivo, desde la consola de administración de Google Cloud.
+No se especifican detalles de cómo habilitar una cuenta de Google BigQuery, ya que es un procedimiento totalmente auto-descriptivo desde la consola de administración de Google Cloud [#f5]_.
 
 Ingestión de datos en Google BigQuery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-[TODO] -> Pantallazos de las interfaces e importación de CSV
+De nuevo el proceso para ingerir datos en BigQuery esta perfectamente documentado en este enlace [#f6]_
+
+Lo que sí es interesante comentar es cuál es la jerarquía de datos en Google BigQuery, ya que luego influye en cómo se realizan las consultas.
+
+La jerarquía en BigQuery está compuesta de los siguientes niveles:
+
+#. ID global de proyecto de Google Cloud
+#. ID de proyecto de Google BigQuery
+#. ID de dataset
+#. ID de tabla
+
+Las relaciones que se establecen dentro de la jerarquía son las siguientes:
+
+- Un proyecto de Google Cloud puede tener múltiples proyectos de Google BigQuery.
+- Un proyecto de Google BigQuery puede tener múltiples datasets.
+- Un dataset puede tener múltiples tablas.
+- Las tablas contienen la información y son una abstracción similar a las tablas disponibles en otros sistemas de bases de datos relacionales, como PostgreSQL.
+
+Para el siguiente caso:
+
+.. image:: ../_static/bigquery.png
+  :width: 800
+  :alt: Jerarquía BigQuery
+
+Contaríamos con las siguientes entidades:
+
+- ID global de proyecto de Google Cloud: `eternal-ship-170218`
+- ID de proyecto de Google BigQuery: `test`
+- ID de dataset: `test`
+- IDs de tablas: `test1, test2, trips_copy, etc.`
 
 Instalación y prueba de un driver ODBC Google BigQuery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -657,8 +672,8 @@ Google proporciona un driver ODBC oficial para Google BigQuery, desarrollado por
     tar zxvf SimbaODBCDriverforGoogleBigQuery64-2.0.6.1011.tar.gz -C /opt
     chown postgres:postgres /opt/simba
 
-Configuración del driver ODBC para Hive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configuración del driver ODBC para BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Una vez descargado el driver ODBC para GoogleBigQuery es necesario editar los archivos que PostgreSQL utiliza para conocer los drivers disponibles en el sistema.
 
@@ -678,7 +693,7 @@ La ubicación de los archivos de configuración se puede obtener ejecutando la s
 
 El comando `odbcinst` lo provee el paquete `unixODBC` que viene instalado por defecto en la distribución on-premise de CARTO.
 
-Una vez conocemos la ubicación de los archivos de configuración, añadimos el driver de Hive a la lista de drivers disponibles:
+Una vez conocemos la ubicación de los archivos de configuración, añadimos el driver de BigQuery a la lista de drivers disponibles:
 
 ::
 
@@ -686,110 +701,68 @@ Una vez conocemos la ubicación de los archivos de configuración, añadimos el 
     Description = Simba ODBC Driver for Google BigQuery (64-bit)
     Driver = /opt/simba/googlebigqueryodbc/lib/64/libgooglebigqueryodbc_sb64.so" >> /data/production/config/postgresql/odbcinst.ini
 
-Para el caso de BigQuery es necesario habilitar OAuth a nivel de driver. Hay `dos modos de funcionamiento`_: TODO add reference
+Configuración de OAuth para BigQuery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+BigQuery soporta OAuth [#f7]_ 2.0 como mecanismo de autorización de aplicaciones. Actualmente, el soporte a OAuth en BigQuery, cuenta con `dos modos de funcionamiento`_:
 
 .. _dos modos de funcionamiento: https://cloud.google.com/bigquery/docs/authentication/
 
 - Autenticación de usuario: Autentica contra una cuenta de usuario de Google obteniendo un `refresh token` que es temporal
 - Autenticación de servicio: Autentica una aplicación a través de una *clave privada de servicio*, clave que debe ser descargada desde la consola de autenticación de Google Cloud.
 
-Para este caso concreto, vamos a utilizar una clave privada .p12, dejándola en `/opt` en el servidor donde hemos descargado el driver ODBC y tenemos instalado PostgreSQL:
+Para este caso concreto, vamos a utilizar el mecanismo de autenticación de usuario, que consiste en configurar la aplicación con una clave privada generada desde la consola de administración de Google [#f8]_ 
 
-TODO -> poner esto bien  `Google Cloud authentication console`_
+.. image:: ../_static/oauth.png
+  :width: 800
+  :alt: OAuth BigQuery
 
-.. _Google Cloud authentication console: https://cloud.google.com/docs/authentication/getting-started
+La obtención de los correspondientes `client_id` y `client_secret` de configuración, así como la URL de callback, donde recibir el token de autorización, se realiza desde la consola de autenticación de Google [#f9]_ utilizando el enlace OAuth client ID.
+
+.. image:: ../_static/oauth-01.png
+  :width: 800
+  :alt: BigQuery Oauth UI
+
+A continuación, esta configuración debe estar presente en el archivo `app_config.yml` de CARTO [#f10]_:
 
 ::
 
-    [root@localhost vagrant]# ls -lh /opt
-    total 20K
-    drwxrwxr-x  12 root     root     4.0K Aug 24 11:07 carto
-    drwxr-xr-x   4 root     root     4.0K Sep  1 13:38 cloudera
-    drwxr-xr-x.  2 root     root     4.0K Mar 26  2015 rh
-    drwxr-xr-x   3 postgres postgres 4.0K Dec 12  2016 simba
-    -rw-r--r--   1 root     root     2.5K Sep  4 09:03 test-d58ed25bb6f7.p12
+    oauth:    
+        bigquery:
+          application_name:     ''
+          client_id:            ''
+          client_secret:        ''
+          callback_url:         '{your_server_url}/api/v1/imports/service/bigquery/oauth_callback'
 
 Instalación y prueba de un Foreign Data Wrapper para Google BigQuery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Una primera aproximación a la hora de probar un Foreign Data Wrapper para Hive, consiste en probar la implementación base disponible en PostgreSQL `postgres_fdw`.
+Una primera aproximación a la hora de probar un Foreign Data Wrapper para Google BigQuery, consiste en probar la implementación base disponible en PostgreSQL `postgres_fdw`.
 
 En este caso, el driver ODBC de Google BigQuery es compatible con `postgres_fdw` del que CARTO cuenta con una implementación base.
 
 Desarrollo de un conector de Google BigQuery para CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-El desarrollo de un conector para Google BigQuery es un caso especial de conector ya que debemos tratar con el flujo de autenticación de OAuth.
+El desarrollo de un conector para Google BigQuery es un caso especial de conector ya que debemos tratar con el flujo de autenticación de OAuth. Como hemos comentado anteriormente, en este desarrollo sólo se va a implementar la autenticación de usuario, que implica, por una parte añadir las interfaces necesarias para que el usuario realice la autenticación y por otra parte escribir el código `backend` necesario para recibir un token de autorización en la URL de callback.
 
-Por ese motivo se van a relizar 3 aproximaciones:
+El código del conector `bigquery.rb` se adjunta en el anexo :ref:`bigquery_conn`
 
-1. Utilización de la actual implementación de `odbc_fdw` para autenticación de usuario.
-2. Utilización de la actual implementación de `odbc_fdw` para autenticación de servicio.
-3. Desarrollo de un conector personalizado para gestionar el flujo de OAuth.
+El código de configuración del nuevo conector se adjunta en el anexo :ref:`bigquery_conn_conf`
 
-Las dos primeras aproximaciones no necesitan código fuente, ya que se basan en la utilización de `odbc_fdw` ya disponible en CARTO. Como desventaja, se deja del lado del usuario la gestión del flujo OAuth para obtener un token de usuario.
+El resto del código del conector, por su complejidad (en cuanto a número de ficheros e interfaces de usuario), no se adjunta en el anexo, pero se puede consultar en la siguiente rama de CARTO [#f11]_.
 
-Aún así, en la siguiente sección veremos ejemplos de uso.
-
-Por otra parte, se desarrolla un conector personalizado para gestionar el flujo de OAuth y la conexión a Google BigQuery, todo integrado desde la interfaz de usuario.
-
-El código del conector se puede encontrar en el archivo `biquery.rb` disponible en el anexo xxx [TODO]
-
-Specially you may want to take a look at the `backend implementation`_
-
-.. _backend implementation: https://github.com/CartoDB/cartodb/blob/bq-connector/lib/carto/connector/providers/bigquery.rb
-
-TODO -> completar bien esto
-
-.. _script: https://github.com/CartoDB/onpremises/blob/onpremises-ts/tools/builder/carto-builder-bigquery.sh
-
-Usage of the `carto-builder-bigquery.sh` script:
-
-::
-
-    Usage: carto-builder-bigquery.sh [-h] [-o|--organization organization] [-c|--client-id clientId] [-s|--client-secret clientSecret] [-e|--email email] [-k|--key-file-path KeyFilePath]
-
-See `this deliverable`_ for more details
-
-.. _this deliverable: https://docs.google.com/document/d/1ZMQgbP_HoMrytFx8TT0encSvLvgyb2HmI1lKi9MHqOA/edit#
-
-See `this issue`_ for even more details
-
-.. _this issue: https://github.com/CartoDB/solutions/issues/1243
 
 Ingestion de datos desde Google BigQuery a CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Como se ha comentado en la sección anterior, se proporcionan tres modos de conectar a Google BigQuery desde CARTO.
+En este caso, contamos con dos opciones a la hora de utilizar el conector.
 
-1. Utilizando autenticación de servicio
-
-::
-
-    curl -v -k -H "Content-Type: application/json"   -d '{
-      "connector": {
-        "provider": "odbc",
-        "connection": {
-          "Driver": "BigQuery",
-          "OAuthMechanism": 0,
-          "Catalog": "eternal-ship-170218",
-          "SQLDialect": 1,
-          "Email": "odbc-443@eternal-ship-170218.iam.gserviceaccount.com",
-          "KeyFilePath": "/opt/test-d58ed25bb6f7.p12"
-        },
-        "table": "order_items",
-        "sql_query": "select * from `eternal-ship-170218.test.test` limit 1;"
-      }
-    }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
-
-
-2. Utilizando autenticación de usuario
+1. Desde la API de importación de BUILDER
 
 En este modo de funcionamiento, el usuario debe gestionar su token de OAuth de la siguiente manera:
 
-En primer lugar, generando unas claves pública y privada para OAuth TODO add link
-
-.. _OAuth client id: https://console.cloud.google.com/apis/credentials
+En primer lugar, generando unas claves pública y privada para OAuth, como se ha descrito anteriormente.
 
 A continuación, editando el archivo `simba.googlebigqueryodbc.ini` incluyendo las claves de acceso.
 
@@ -824,15 +797,24 @@ Una vez disponemos de un `refresh token` se puede utilizar la API de importació
       }
     }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
 
-En ambos casos, las peticiones a la API de importación son ligeramente diferentes a las que vimos en los conectores para Hive, Impala, Redshift o MongoDB. El motivo es que Google BigQuery necesita de parámetros adicionales, por tanto utilizamos una implementación genérica de FDW para drivers ODBC.
-
-Sin embargo, el modo de funcionamiento es exactamente el mismo. Tanto los parámetros de conexión como el atributo `sql_query` se envían al *backend* de CARTO.
+Tanto los parámetros de conexión como el atributo `sql_query` se envían al *backend* de CARTO.
 
 Este crea las entidades necesarias en PostgreSQL para hacer una conexión a Google BigQuery a través de un FDW que en última instancia utiliza el driver ODBC para realizar la consulta SQL con los parámetros de autenticación necesarios.
 
-Dicho esto, se adjunta una captura del modo de funcionamiento del conector de Google BigQuery desde la interfaz de usuario de CARTO. En este caso, el flujo de autenticación OAuth se hace desde la propia interfaz y una vez obtenido el token, se realiza una llamada a la API de importación con autenticación de usuario, tal y como hemos visto en esta sección.
+2. Desde la interfaz de importación de BUILDER
+
+.. image:: ../_static/bigquery.gif
+  :width: 800
+  :alt: BigQuery UI
 
 .. [#f1] https://hub.docker.com/r/tutum/mongodb/ - mayo 2019
 .. [#f2] https://wiki.postgresql.org/wiki/Foreign_data_wrappers - mayo 2019
 .. [#f3] https://multicorn.org/ - mayo 2019
 .. [#f4] https://github.com/EnterpriseDB/mongo_fdw - mayo 2019
+.. [#f5] https://cloud.google.com/bigquery/docs/enable-transfer-service - mayo 2019
+.. [#f6] https://cloud.google.com/bigquery/docs/loading-data - mayo 2019
+.. [#f7] https://oauth.net/2/ - mayo 2019
+.. [#f8] https://console.cloud.google.com/apis/credentials - mayo 2019
+.. [#f9] https://console.cloud.google.com/apis/credentials - mayo 2019
+.. [#f10] https://github.com/CartoDB/cartodb/blob/master/config/app_config.yml.sample - mayo 2019
+.. [#f11] https://github.com/CartoDB/cartodb/tree/bq-connector - mayo 2019
