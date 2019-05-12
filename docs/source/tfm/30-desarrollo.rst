@@ -44,6 +44,8 @@ La integración de CARTO con Apache Hive se va a realizar de acuerdo a los sigui
 - Distribución: Cloudera Quickstart
 - Despliegue: Docker sobre AWS
 
+.. _hive_env:
+
 Despliegue de un entorno de prueba de Apache Hive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -81,18 +83,14 @@ Deteniendo los siguientes servicios es posible arrancar una imagen de Cloudera Q
 
 Después de detener los servicios es importante reiniciar la interfaz de HUE que nos permitirá realizar consultas interactivas sobre Hive con el siguiente comando: `/etc/init.d/hue restart`
 
+.. _hive_ing:
+
 Ingestión de datos en Apache Hive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Una vez hemos desplegado Apache Hive utilizando la imagen de Cloudera Quickstart con Docker, podemos hacer una ingestión inicial de datos para posteriormente realizar las pruebas necesarias de integración con CARTO.
 
-Accediendo al servidor EC2 de Amazon:
-
-::
-
-    ssh {path_to_pem_file} {user}@{server}
-
-Y a continuación abriendo una sesión de bash en el contenedor de Cloudera Quickstart:
+Abriendo una sesión de bash en el contenedor de Cloudera Quickstart:
 
 ::
 
@@ -113,12 +111,14 @@ Podemos utilizar `sqoop` para hacer una ingestión inicial de datos en Hive desd
 
 Por último, podemos acceder a la interfaz de HUE y comprobar que efectivamente las tablas se han cargado correctamente en Hive
 
-TODO: añadir capturas de pantalla
-
 ::
 
     http://localhost:8888/
     usr/pwd: cloudera/cloudera
+
+.. image:: ../_static/hue.png
+  :width: 800
+  :alt: HUE UI
 
 Instalación y prueba de un driver ODBC para Hive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -172,7 +172,9 @@ Desarrollo de un conector de Hive para CARTO
 
 Puesto que el driver ODBC para Hive es compatible con `postgres_fdw` la implementación de un conector de Hive para CARTO se reduce a añadir una nueva clase al `backend` indicando cuáles son los parámetros necesarios para realizar una consulta SQL sobre Hive y configurar este conector para que sea accesible desde la API de importación de CARTO.
 
-El código del conector `hive.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+El código del conector `hive.rb` se adjunta en el anexo :ref:`hive_conn`
+
+El código de configuración del nuevo conector se adjunta en el anexo :ref:`hive_conn_conf`
 
 Ingestion de datos desde Hive a CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -229,14 +231,12 @@ La integración de CARTO con Apache Impala se va a realizar de acuerdo a los sig
 Despliegue de un entorno de prueba de Apache Impala
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Para desplegar una instancia de Apache Impala, utilizamos la imagen de Cloudera Quickstart disponible en Docker Hub, tal y como hicimos al desplegar Apache Hive.
-
-TODO añadir link a la sección anterior
+Para desplegar una instancia de Apache Impala, utilizamos la imagen de Cloudera Quickstart disponible en Docker Hub, tal y como hicimos al desplegar Apache Hive. Ver :ref:`hive_env`
 
 Ingestión de datos en Apache Impala
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Apache Impala es compatible con el modelo de metadatos de Apache Hive, por tanto, se pueden ingestar datos en Apache Impala tal y como se hizo para Apache Hive. [TODO] -> Añadir link a la sección correspondiente.
+Apache Impala es compatible con el modelo de metadatos de Apache Hive, por tanto, se pueden ingestar datos en Apache Impala tal y como se hizo para Apache Hive. Ver :ref:`hive_ing`
 
 Una vez presentes los datos en el `metastore` de Hive, es necesario ejecutar la siguiente instrucción para actualizar la base de datos de metadatos de Impala:
 
@@ -299,9 +299,9 @@ Análogamente a lo que ocurría con Hive, el driver ODBC de Cloudera para Apache
 Desarrollo de un conector de Impala para CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Puesto que el driver ODBC para Impala es compatible con `postgres_fdw` la implementación de un conector de Impala para CARTO se reduce a añadir una nueva clase al `backend` indicando cuáles son los parámetros necesarios para realizar una consulta SQL sobre Impala y configurar este conector para que sea accesible desde la API de importación de CARTO.
+Puesto que el driver ODBC para Impala es compatible con `odbc_fdw` la implementación de un conector de Impala para CARTO se reduce a configurar este conector para que sea accesible desde la API de importación de CARTO.
 
-El código del conector `impala.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+El código de configuración del nuevo conector se adjunta en el anexo :ref:`impala_conn_conf`
 
 Ingestion de datos desde Impala a CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -312,13 +312,14 @@ Una vez más, la petición a la API de importación de CARTO es análoga a la de
 
     curl -v -k -H "Content-Type: application/json"   -d '{
       "connector": {
-        "provider": "impala",
+        "provider": "odbc",
         "connection": {
-          "server":"{impala_server_ip}",
-          "database":"default",
-          "port":21050,
-          "username":"{impala_user}",
-          "password":"{impala_password}"
+          "Driver":"Impala",
+          "Host":"{impala_server_ip}",
+          "UID":"{impala_username}",
+          "PWD":"{impala_password}",
+          "Schema":"default",
+          "Port":"21050"
         },
         "schema": "default",
         "table": "top_order_items",
@@ -338,12 +339,25 @@ En este caso, Impala no implementa el paradigma MapReduce sino que utiliza un me
 
 La tabla generada en PostgreSQL está asociada a un dataset del usuario de CARTO que lanzó la petición y por tanto puede trabajar con él, de la misma manera que con cualquier otro dataset.
 
+Antes de continuar
+------------------
+
+Antes de continuar con el desarrollo de los siguientes conectores Big Data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemático para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
+
+- Tienen un Driver ODBC
+- Soportan SQL como lenguaje de procesamiento
+- Son compatibles con `postgres_fdw` o `odbc_fdw`
+
+Tal y como hemos visto en las secciones anteriores, el desarrollo de conectores para Hive, Impala y Redshift es completamente análogo, por tanto, el mismo procedimiento sería válido para sistemas de almacenamiento que cumplan las 3 características mencionadas en esta sección.
+
+A modo de ejemplo y sin entrar en la implementación de un conector para Amazon Redshift, a continuación se especifican las etapas necesarias para incluir este conector en una distribución de CARTO.
+
 Integración de CARTO con Amazon Redshift
 ----------------------------------------
 
 Amazon Redshift es un almacén de datos de la familia de servicios web de Amazon, completamente administrado que permite analizar datos con SQL estándar.
 
-La integración de CARTO con Apache Redshift se va a realizar de acuerdo a los siguientes parámetros:
+La integración de CARTO con Apache Redshift se realizaría de acuerdo a los siguientes parámetros:
 
 - Soporta SQL: Sí
 - Driver ODBC: Sí
@@ -353,20 +367,11 @@ La integración de CARTO con Apache Redshift se va a realizar de acuerdo a los s
 - Distribución: AWS
 - Despliegue: Auto-gestionado a través de la consola de administración de AWS
 
-Despliegue de un entorno de prueba de Amazon Redshift
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-TODO -> incluir capturas de pantalla
-
-Ingestión de datos en Amazon Redshift
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-TODO
 
 Instalación y prueba de un driver ODBC para Amazon Redshift
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-El procedimiento para instalar el driver ODBC para Impala es similar a los de Hive e Impala [TODO] -> link a la sección correspondiente.
+El procedimiento para instalar el driver ODBC para Impala es similar a los de Hive e Impala.
 
 ::
 
@@ -389,12 +394,14 @@ El procedimiento es análogo a los casos de Hive e Impala:
 Instalación y prueba de un Foreign Data Wrapper para Redshift
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Análogamente a lo que ocurría con Hive e Impala, el driver ODBC de Cloudera para Amazon Redshift también es compatible con `postgres_fdw` del que CARTO cuenta con una implementación base. Por tanto, no es necesaria una implementación personalizada.
+Análogamente a lo que ocurría con Hive e Impala, el driver ODBC de Cloudera para Amazon Redshift también es compatible con `odbc_fdw` del que CARTO cuenta con una implementación base. Por tanto, tal y como ocurrió con el conector para Impala, no es necesaria una implementación personalizada.
 
-Desarrollo de un conector de Redshift para CARTO
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Desarrollo de un conector de Impala para CARTO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-El código del conector `redshift.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+Puesto que el driver ODBC para Impala es compatible con `odbc_fdw` la implementación de un conector de Redshift para CARTO se reduce a configurar este conector para que sea accesible desde la API de importación de CARTO.
+
+El código de configuración del nuevo conector se adjunta en el anexo :ref:`redshift_conn_conf`
 
 Ingestion de datos desde Redshift a CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,30 +412,20 @@ Una vez más, la petición a la API de importación de CARTO es análoga a la de
 
     curl -v -k -H "Content-Type: application/json"   -d '{
       "connector": {
-        "provider": "redshift",
+        "provider": "odbc",
         "connection": {
-          "server":"{redshift_server_ip}",
-          "database":"default",
-          "port":5439,
-          "username":"{redshift_user}",
-          "password":"{redshift_password}"
+          "Driver":"Redshift",
+          "Host":"{redshift_server_ip}",
+          "UID":"{redshift_username}",
+          "PWD":"{redshift_password}",
+          "Schema":"default",
+          "Port":"{redshift_port}",
         },
         "schema": "default",
         "table": "top_order_items",
         "sql_query": "select * from order_items where price > 1000"
       }
     }'   "https://carto.com/user/carto/api/v1/imports/?api_key={YOUR_API_KEY}"
-
-Antes de continuar
-------------------
-
-Antes de continuar con el desarrollo de los siguientes conectores Big Data para CARTO, cabe destacar que hemos encontrado un procedimiento sistemático para desarrollar conectores desde sistemas de almacenamiento que cumplen las siguientes características:
-
-- Tienen un Driver ODBC
-- Soportan SQL como lenguaje de procesamiento
-- Son compatibles con `postgres_fdw`
-
-Tal y como hemos visto en las secciones anteriores, el desarrollo de conectores para Hive, Impala y Redshift es completamente análogo, por tanto, el mismo procedimiento sería válido para sistemas de almacenamiento que cumplan las 3 características mencionadas en esta sección.
 
 Integración de CARTO con MongoDB
 --------------------------------
@@ -444,20 +441,10 @@ MongoDB es una base de datos orientada a objetos que pertenece a la familia de b
 - Versión actual: 3.4
 - Driver ODBC: Sí
 
-La integración de CARTO con Apache Redshift se va a realizar de acuerdo a los siguientes parámetros:
-
-- Soporta SQL: No
-- Driver ODBC: Sí
-- Compatible con `postgres_fdw`: No
-- Versión probada: 3.4
-- Autenticación: Usuario y contraseña
-- Distribución: Imagen de Docker
-- Despliegue: Docker sobre AWS
-
 Despliegue de un entorno de prueba de MongoDB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Para el despliegue de una instancia de MongoDB vamos a utilizar la siguiente imagen -> TODO https://hub.docker.com/r/tutum/mongodb/
+Para el despliegue de una instancia de MongoDB vamos a utilizar esta imagen de Docker de MongoDB [#f1]_
 
 Ejecutamos el script de arranque del contenedor de MongoDB sobre una instancia de EC2:
 
@@ -505,18 +492,15 @@ Una vez hemos obtenido las credenciales de usuario administrador en el anterior 
 Instalación y prueba de un Foreign Data Wrapper para MongoDB
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A diferencia de lo que ocurría en los casos de Hive, Impala o Redshift, el driver ODBC de MongoDB no es compatible con `postgres_fdw`, por tanto, nos encontramos con un caso en que debemos utilizar un Foreignd Data Wrapper específico.
+A diferencia de lo que ocurría en los casos de Hive, Impala o Redshift, el driver ODBC de MongoDB no es compatible con `postgres_fdw` u `odbc_fdw`, por tanto, nos encontramos con un caso en que debemos utilizar un Foreignd Data Wrapper específico.
 
 Esto tiene sentido ya que MongoDB, es una base de datos NoSQL orientada a objetos sin interfaz SQL, por tanto la implementación de un foreign data wrapper debe ser diferente.
 
-A la hora de elegir un FDW para MongoDB valoramos las opciones listadas en el wiki oficial de PostgreSQL [TODO] -> https://wiki.postgresql.org/wiki/Foreign_data_wrappers.
+A la hora de elegir un FDW para MongoDB valoramos las opciones listadas en el wiki oficial de PostgreSQL [#f2]_
 
-Entre la lista, nos encontramos con dos FDW desarrollados con Multicorn [TODO] -> link y uno desarrollado de manera nativa en C. Accediendo al código fuente de los repositorios, vemos que el más activo es el FDW nativo, por tanto, lo seleccionamos como candidato para conectar a MongoDB desde PostgreSQL.
+Entre la lista, nos encontramos con dos FDW desarrollados con Multicorn [#f3]_ y uno desarrollado de manera nativa en C. Accediendo al código fuente de los repositorios, vemos que el más activo es el FDW nativo, por tanto, lo seleccionamos [#f4]_ como candidato para conectar a MongoDB desde PostgreSQL.
 
-TODO -> ADD LINK 
-.. _this one: https://github.com/EnterpriseDB/mongo_fdw
-
-Las instrucciones de instalación a fecha septiembre de 2017 de `mongo_fdw` no resultan al 100% correctas, por tanto, adjuntamos a continuación los pasos necesarios para realizar la instalación, configuración y prueba del mismo sobre CentOS 6.9
+Las instrucciones de instalación a fecha mayo de 2019 de `mongo_fdw` no resultan al 100% correctas, por tanto, adjuntamos a continuación los pasos necesarios para realizar la instalación, configuración y prueba del mismo sobre CentOS 6.9
 
 *Procedemos a ejecutar los siguientes comandos como root en la misma máquina donde tenemos PostgreSQL instalado*
 
@@ -550,9 +534,9 @@ Descargar la última release de `mongo_fdw`, en nuestro caso la 5.0.0 compatible
     tar zxvf REL-5_0_0.tar.gz
     cd mongo_fdw-REL-5_0_0
 
-A fecha de septiembre de 2017, hay un bug en una de las dependencias de `mongo_fdw` [TODO] -> See `this pull request`_.
+A fecha de mayo de 2019, hay un bug en una de las dependencias de `mongo_fdw`. Ver `pull request`_.
 
-.. _this pull request: https://github.com/EnterpriseDB/mongo_fdw/pull/79/files
+.. _pull request: https://github.com/EnterpriseDB/mongo_fdw/pull/79/files
 
 Aplicamos el parche manualmente, sobre el archivo `autogen.sh`
 
@@ -598,7 +582,11 @@ Llegados a este punto, debemos ser capaces de probar el FDW `mongo_fdw` directam
 Desarrollo de un conector de MongoDB para CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-El código del conector `mongo.rb` se adjunta en el anexo xxx -> TODO incluir enlace
+Puesto que el driver ODBC para MongoDB no es compatible directamente con `postgres_fdw` la implementación de un conector de MongoDB pasa por crear una nueva clase en el `backend` de CARTO que permita esta conexión entre PostgreSQL y Mongo utilizando el driver ODBC previamente instalado.
+
+El código del conector `mongo.rb` se adjunta en el anexo :ref:`mongo_conn`
+
+El código de configuración del nuevo conector se adjunta en el anexo :ref:`mongo_conn_conf`
 
 Ingestion de datos desde MongoDB a CARTO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -843,3 +831,8 @@ Sin embargo, el modo de funcionamiento es exactamente el mismo. Tanto los parám
 Este crea las entidades necesarias en PostgreSQL para hacer una conexión a Google BigQuery a través de un FDW que en última instancia utiliza el driver ODBC para realizar la consulta SQL con los parámetros de autenticación necesarios.
 
 Dicho esto, se adjunta una captura del modo de funcionamiento del conector de Google BigQuery desde la interfaz de usuario de CARTO. En este caso, el flujo de autenticación OAuth se hace desde la propia interfaz y una vez obtenido el token, se realiza una llamada a la API de importación con autenticación de usuario, tal y como hemos visto en esta sección.
+
+.. [#f1] https://hub.docker.com/r/tutum/mongodb/ - mayo 2019
+.. [#f2] https://wiki.postgresql.org/wiki/Foreign_data_wrappers - mayo 2019
+.. [#f3] https://multicorn.org/ - mayo 2019
+.. [#f4] https://github.com/EnterpriseDB/mongo_fdw - mayo 2019
