@@ -362,7 +362,7 @@ La integración de CARTO con Apache Redshift se realizaría de acuerdo a los sig
 - Soporta SQL: Sí
 - Driver ODBC: Sí
 - Compatible con `postgres_fdw`: Sí
-- Versión probada: Amazon no proporciona información acerca del versionado de Redshift, por tanto, las pruebas realizadas son con la versión actual a fecha Septiembre 2017
+- Versión probada: Amazon no proporciona información acerca del versionado de Redshift, por tanto, las pruebas realizadas son con la versión actual a fecha Mayo 2019
 - Autenticación: Usuario y contraseña
 - Distribución: AWS
 - Despliegue: Auto-gestionado a través de la consola de administración de AWS
@@ -628,7 +628,7 @@ La integración de CARTO con Google BigQuery se va a realizar de acuerdo a los s
 - Driver ODBC: Sí
 - Compatible con `postgres_fdw`: Sí
 - Versión probada: 2.3.0
-- Autenticación: Google no proporciona información acerca del versionado de BigQuery, por tanto, las pruebas realizadas son con la versión actual a fecha Septiembre 2017
+- Autenticación: Google no proporciona información acerca del versionado de BigQuery, por tanto, las pruebas realizadas son con la versión actual a fecha Mayo 2019
 - Distribución: SaaS
 - Despliegue: SaaS
 
@@ -637,7 +637,7 @@ Despliegue de un entorno de prueba de Google BigQuery
 
 En contraposición a otros sistemas de base de datos, Google BigQuery es una base de datos SaaS completamente auto-gestionada por Google siguiendo el paradigma *serverless*. Así que para obtener un entorno de pruebas de Google BigQuery, simplemente debemos habilitarlo con nuestra cuenta de Google.
 
-Google ofrece una capa gratuita para BigQuery (a fecha septiembre de 2017), con unos límites más que suficientes para realizar pruebas y desarrollos: 1TB por mes en lecturas e importaciones/exportaciones ilimitadas.
+Google ofrece una capa gratuita para BigQuery (a fecha mayo de 2019), con unos límites más que suficientes para realizar pruebas y desarrollos: 1TB por mes en lecturas e importaciones/exportaciones ilimitadas.
 
 No se especifican detalles de cómo habilitar una cuenta de Google BigQuery, ya que es un procedimiento totalmente auto-descriptivo, desde la consola de administración de Google Cloud.
 
