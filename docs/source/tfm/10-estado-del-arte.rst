@@ -33,6 +33,10 @@ En la actualidad, CARTO es una plataforma formada por multitud de APIs, librerí
 
 Una herramienta web de análisis para que analistas y usuarios de negocio que permite crear cuadros de mando accionables que se pueden compartir.
 
+.. image:: ../_static/builder.png
+  :width: 800
+  :alt: EL BUILDER
+
 - ENGINE [#f3]_
 
 Un conjunto de herramientas geoespaciales, servicios y APIs para el desarrollo de aplicaciones geoespaciales.

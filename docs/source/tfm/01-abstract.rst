@@ -123,10 +123,11 @@ Este trabajo final de máster está organizado en capítulos, siguiendo la sigui
 1. :ref:`estado-del-arte`: Se repasan las herramientas de almacenamiento y procesamiento Big Data con las que se va a trabajar y se definen algunos de los conceptos teóricos que sirven de fundamentación para el trabajo.
 2. :ref:`metodologia`: Definición de una metodología de trabajo sistemática y desglose en tareas del trabajo a realizar.
 3. :ref:`desarrollo`: Descripción de la implementación de cada uno de los conectores, demostración de uso, etc.
-4. :ref:`conclusiones`
-5. :ref:`bibliografia`
-6. :ref:`anexos`
-7. :ref:`glosario`
+4. :ref:`casouso`: Un caso de uso para entender mejor desde el punto de vista de un usuario de la plataforma, del valor de contar con los conectores desarrollados en el trabajo.
+5. :ref:`conclusiones`
+6. :ref:`bibliografia`
+7. :ref:`anexos`
+8. :ref:`glosario`
 
 
 Palabras clave: *BASH, Docker, Vagrant, Location Intelligence, AWS, HDFS, Hadoop, BigQuery, Hive, Impala, Spark, NoSQL, Cassandra, MongoDB, CARTO, dashboards, análisis geoespacial*
