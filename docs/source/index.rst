@@ -14,6 +14,7 @@ CARTO Big Data connectors
    tfm/10-estado-del-arte
    tfm/20-metodologia
    tfm/30-desarrollo
+   tfm/31-casouso
    tfm/40-conclusiones
    tfm/50-bibliografia
    tfm/60-anexos
