@@ -20,4 +20,8 @@ El objetivo del periodista, es poner a disposición del público general de una 
 
 TODO -> completar workflow
 
+1. Sincronizar CARTO con la fuente de datos de FlightRadar24 en BigQuery (últimos 30 días)
+2. Análisis visual para validar hipótesis (hay vuelos de vigilancia del FBI) con BUILDER
+3. Automatización de la detección de vuelos de vigilancia y publicación del mapa
+
 .. [#f1] https://www.flightradar24.com/60,15/6 - mayo 2019
