@@ -73,7 +73,7 @@ A. Código fuente de conector para Hive
 
 	module Carto
 	  class Connector
-	    
+
 	    class ImpalaProvider < OdbcProvider
 
 	      def initialize(context, params)
@@ -222,7 +222,7 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 
 .. _redshift_conn_conf:
 
-C. Configuración del conector para Amazon Redshift
+D. Configuración del conector para Amazon Redshift
 --------------------------------------------------
 
 La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` presente en el archivo `cartodb/lib/carto/connector/providers.rb` del repositorio https://github.com/CartoDB/cartodb
@@ -287,10 +287,10 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 
 .. _mongo_conn:
 
-D. Código fuente de conector para MongoDB
+E. Código fuente de conector para MongoDB
 -----------------------------------------
 
-:: 
+::
 
 	# encoding: utf-8
 
@@ -407,7 +407,7 @@ D. Código fuente de conector para MongoDB
 
 .. _mongo_conn_conf:
 
-E. Configuración del conector para MongoDB
+F. Configuración del conector para MongoDB
 ------------------------------------------
 
 La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` presente en el archivo `cartodb/lib/carto/connector/providers.rb` del repositorio https://github.com/CartoDB/cartodb
@@ -477,7 +477,7 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 
 .. _bigquery_conn:
 
-E. Código fuente de conector para BigQuery
+G. Código fuente de conector para BigQuery
 ------------------------------------------
 
 ::
@@ -586,7 +586,7 @@ E. Código fuente de conector para BigQuery
 
 .. _bigquery_conn_conf:
 
-F. Configuración del conector para BigQuery
+H. Configuración del conector para BigQuery
 -------------------------------------------
 
 La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` presente en el archivo `cartodb/lib/carto/connector/providers.rb` del repositorio https://github.com/CartoDB/cartodb
@@ -661,14 +661,14 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 
 .. _findloops:
 
-G. Análisis para encontrar bucles en secuencias de puntos
+I. Análisis para encontrar bucles en secuencias de puntos
 ---------------------------------------------------------
 
 ::
 
 	/*
 	DEP_EXT_findloops
-	From a points dataset representing positions of a moving object along a track, 
+	From a points dataset representing positions of a moving object along a track,
 	this function finds the loops in the track
 
 	Inputs managed by CARTO, common to all DEP_EXT functions:
@@ -684,7 +684,7 @@ G. Análisis para encontrar bucles en secuencias de puntos
 	* track_id text: the track identifier, equal to cat_column of the input
 	* loop_id integer: ordinal of the loop for each track
 	* the_geom geometry(Geometry,4326): the circle that represents the loop
-	* radius numeric: radius of 
+	* radius numeric: radius of
 	*/
 	CREATE OR REPLACE FUNCTION DEP_EXT_findloops(
 	        operation text,
