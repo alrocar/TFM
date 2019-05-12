@@ -11,7 +11,7 @@ Una vez analizado el estado del arte en cuanto a *CARTO* y los principales siste
 
 Dado este nexo de unión, se pretende obtener una metodología sistemática que permita realizar conexiones desde PostgreSQL a sistemas de almacenamiento masivo y a través de la experimentación se exponen casos concretos de esta metodología para los principales sistemas de almacenamiento y procesamiento.
 
-Una vez desarrollados los diferentes conectores, a través de un caso de uso consistente en [TODO] se demuestran las nuevas capacidades de conexión de *CARTO* con sistemas Big Data.
+Una vez desarrollados los diferentes conectores, a través de un caso de uso consistente en analizar datos de posicionamiento de vuelos para detectar patrones de vigilancia, se demuestran las nuevas capacidades de conexión de *CARTO* con sistemas Big Data.
 
 Por último, cabe descatar que durante este trabajo final de máster, se ha pretendido seguir la filosofía del plan de estudios del Máster Big Data Analytics de la Universidad Politécnica de Valencia, consistente en mostrar lo amplio del ecosistema Big Data y de las capacidades y aptitudes que deben poseer los profesionales de este sector.
 
@@ -20,12 +20,9 @@ En concreto, este trabajo está relacionado con los siguientes contenidos tratad
 - BASH
 - Virtualización: Docker y Vagrant
 - Business/Location Intelligence
-- Entornos de gestión Big Data: AWS, Azure, Hadoop, BigQuery, etc.
-- NoSQL: Cassandra, MongoDB
+- Entornos de gestión Big Data: AWS, Hadoop, BigQuery, etc.
+- NoSQL: MongoDB
 - Técnicas y herramientas de visualización
-
-Trabajo futuro
---------------
 
 Agradecimientos
 ---------------

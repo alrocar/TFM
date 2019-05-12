@@ -659,4 +659,160 @@ La configuración consiste en añadir una nuevo objecto al objeto `PROVIDERS` pr
 	      }
 		}...
 
-	
+.. _findloops:
+
+G. Análisis para encontrar bucles en secuencias de puntos
+---------------------------------------------------------
+
+::
+
+	/*
+	DEP_EXT_findloops
+	From a points dataset representing positions of a moving object along a track, 
+	this function finds the loops in the track
+
+	Inputs managed by CARTO, common to all DEP_EXT functions:
+	    operation               text: 'create' or 'populate'
+	    table_name              text: the name of the previous node table
+	    primary_source_query    text: the query on the previous node table
+	    primary_source_columns  text: the columns of the previous node table
+	User input:
+	    cat_column                 text: if we have more than one track that is identified by a column value
+	    temp_column       text: sorting column, usually timestamp
+	Output:
+	* cartodb_id bigint
+	* track_id text: the track identifier, equal to cat_column of the input
+	* loop_id integer: ordinal of the loop for each track
+	* the_geom geometry(Geometry,4326): the circle that represents the loop
+	* radius numeric: radius of 
+	*/
+	CREATE OR REPLACE FUNCTION DEP_EXT_findloops(
+	        operation text,
+	        table_name text,
+	        primary_source_query text,
+	        primary_source_columns text[],
+	        cat_column text,
+	        temp_column text
+	    )
+	    RETURNS VOID AS $$
+	        DECLARE
+	            tail text;
+	            categorized text;
+	            cat_string text;
+	            cat_string2 text;
+	            sub_q text;
+	            s record;
+	            gSegment            geometry = NULL;
+	            gLastPoint          geometry = NULL;
+	            gLastTrackID        text = NULL;
+	            gLoopPolygon        geometry = NULL;
+	            gRadius             numeric;
+	            iLoops              integer := 0;
+	            cdbi                bigint := 0 ;
+	        BEGIN
+
+	            IF operation = 'create' THEN
+
+	                EXECUTE 'DROP TABLE IF EXISTS ' || table_name;
+
+	                EXECUTE 'CREATE TABLE ' || table_name || '(cartodb_id bigint, track_id text, loop_id integer, the_geom geometry(Geometry,4326), radius numeric)';
+
+	            ELSEIF operation = 'populate' THEN
+
+	                -- DEFAULTS
+	                -- -- no temporal column, then use cartodb_id
+	                IF  trim(temp_column) = '0' THEN
+	                   temp_column := 'cartodb_id';
+	                END IF;
+
+	                -- no category, no partition
+	                IF  trim(cat_column) = '0' THEN
+	                    categorized := ' order by ' || temp_column;
+	                    cat_string := '';
+	                ELSE
+	                    categorized := 'partition by ' || cat_column || ' order by ' || temp_column;
+	                    cat_string := cat_column;
+	                END IF;
+
+	                -- partition and sorting of the input
+	                sub_q := 'WITH '
+	                    ||  'prequery as('
+	                    ||      'SELECT '
+	                    ||      cat_string || ' as cat,'
+	                    ||      temp_column || ' as temp_column,'
+	                    ||      'the_geom as point'
+	                    ||      ' FROM ('
+	                    ||          primary_source_query
+	                    ||      ') _q'
+	                    ||   '),'
+	                    ||  'pts as('
+	                    ||      'SELECT '
+	                    ||      ' cat'
+	                    ||      ', temp_column'
+	                    ||      ', point'
+	                    ||      ', row_number() over(partition by cat order by temp_column) as index'
+	                    ||      ' FROM prequery'
+	                    ||      ' ORDER BY cat, temp_column'
+	                    ||  ')'
+	                    ||      'SELECT '
+	                    ||      ' b.cat::text as track_id'
+	                    ||      ', ST_MakeLine(ARRAY[a.point, b.point]) AS geom'
+	                    ||      ' FROM pts as a, pts as b'
+	                    ||      ' WHERE b.index > 1'
+	                    ||      ' AND a.index = b.index - 1'
+	                    ||      ' AND a.cat = b.cat '
+	                    ||      ' ORDER BY b.cat, b.temp_column';
+
+	                FOR s IN EXECUTE sub_q
+	                LOOP
+
+	                    -- restart when new track
+	                    if gLastTrackID <> s.track_id then
+	                        gSegment := null;
+	                        gLastPoint := null;
+	                        iLoops := 0;
+	                    end if;
+
+	                    -- build segments
+	                    if gSegment is null then
+	                        gSegment := s.geom;
+	                    elseif ST_equals(s.geom, gLastPoint) = false then
+	                        gSegment := ST_Makeline(gSegment, s.geom);
+	                    end if;
+
+	                    gLoopPolygon := ST_BuildArea(ST_Node(ST_Force2D(gSegment)));
+
+
+	                    if gLoopPolygon is not NULL and ST_Numpoints(gSegment) > 3 then
+
+	                        iLoops := iLoops + 1;
+	                        gRadius := (|/ ST_area(gLoopPolygon::geography)/PI());
+	                        gSegment := null;
+
+	                        EXECUTE
+	                        'INSERT INTO '
+	                        || quote_ident(table_name)
+	                        || ' VALUES('
+	                        || cdbi || ', '
+	                        || quote_literal(s.track_id) || ', '
+	                        || iLoops ||', '
+	                        || 'ST_GeomFromText(' || quote_literal(ST_astext(gLoopPolygon)) || ', 4326), '
+	                        || gRadius || ')';
+
+	                        cdbi := cdbi +1;
+
+	                    end if;
+
+	                    IF  trim(cat_column) <> '0' THEN
+	                        gLastTrackID = s.track_id;
+	                    END IF;
+
+	                    gLastPoint := s.geom;
+
+	                END LOOP;
+
+
+	            END IF;
+
+	        END;
+	$$ LANGUAGE plpgsql;
