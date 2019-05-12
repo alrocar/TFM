@@ -8,7 +8,7 @@ Contexto
 
 Actualmente, las organizaciones que utilizan *CARTO* como herramienta de análisis geoespacial tienen multitud de fuentes de información y aplicaciones ya instaladas que generan continuamente nuevos datos.
 
-El principal valor de *CARTO* para estas organizaciones es el de conectarse con esas fuentes de información (datos de :ref:`crm`, :ref:`erp`, hojas de cálculo, archivos con contenido geoespacial, bases de datos relacionales, etc.) a través de una interfaz sencilla e intuitiva, para generar nueva información de valor añadido para su negocio mediante análisis geoespaciales y visualizaciones.
+Uno de los valores de *CARTO* para estas organizaciones es el de conectarse con esas fuentes de información (datos de :ref:`crm`, :ref:`erp`, hojas de cálculo, archivos con contenido geoespacial, bases de datos relacionales, etc.) a través de una interfaz sencilla e intuitiva, para generar nueva información de valor añadido para su negocio mediante análisis geoespaciales y visualizaciones.
 
 En determinadas organizaciones, especialmente de tamaño medio o grande, ocurre que diversos equipos gestionan sus datos con sistemas de información heterogéneos que utilizan repositorios de datos tales como:
 
@@ -28,13 +28,62 @@ Estas organizaciones utilizan *CARTO* para importar sus datos y analizar la info
 
 *CARTO* ofrece un flujo de trabajo formado por cinco pasos:
 
-1. Ingestión de datos: Consiste en llevar los datos de negocio, provenientes de distintas fuentes a la plataforma.
-2. Enriquecimiento de los datos: CARTO cuenta con un catálogo de datos previamente analizados y curados de diferente tipología (demográficos, económicos, movilidad, puntos de interés, ...) que son clave para añadir nueva información a los datos de negocio y relacionar variables para buscar respuesta a preguntas complejas tales como: ¿de dónde vienen los visitantes de mis tiendas físicas? ¿cuál es su perfil demográfico? ¿cuál es su poder adquisitivo? etc.
-3. Análisis: APIs y soluciones orientadas al análisis espacial
-4. Soluciones y visualización: Librerías, SDKs, APIs y herramientas específicas que permiten crear soluciones y exponer de manera visual los resultados obtenidos en los análisis
-5. Integraciones: Otros flujos para dar salida a los resultados obtenidos hacia la plataforma del cliente.
+.. image:: ../_static/flujo.png
+  :width: 800
+  :alt: Flujo de trabajo en CARTO
 
-![](../_static/flujo.png)
+1. Ingestión de datos
+
+Consiste en llevar los datos de negocio, provenientes de distintas fuentes a la plataforma, a través de APIs e interfaces de usuario intuitivas.
+
+.. image:: ../_static/ingestion.png
+  :width: 800
+  :alt: Ingestión de datos
+
+
+2. Enriquecimiento de los datos
+
+CARTO cuenta con un catálogo de datos previamente analizados y curados de diferente tipología (demográficos, económicos, movilidad, puntos de interés, ...) que son clave para añadir nueva información a los datos de negocio y relacionar variables para buscar respuesta a preguntas complejas tales como: ¿de dónde vienen los visitantes de mis tiendas físicas? ¿cuál es su perfil demográfico? ¿cuál es su poder adquisitivo? etc.
+
+.. image:: ../_static/enrichment.png
+  :width: 800
+  :alt: Enriquecimiento de datos
+
+.. image:: ../_static/enrichment-02.png
+  :width: 800
+  :alt: Enriquecimiento de datos
+
+3. Análisis
+
+APIs y soluciones orientadas al análisis espacial
+
+.. image:: ../_static/analysis.png
+  :width: 300
+  :alt: Análisis de datos
+
+.. image:: ../_static/analysis-01.png
+  :width: 300
+  :alt: Análisis de datos
+
+4. Soluciones y visualización
+
+Librerías, SDKs, APIs y herramientas específicas que permiten crear soluciones y exponer de manera visual los resultados obtenidos en los análisis
+
+.. image:: ../_static/solutions.png
+  :width: 300
+  :alt: Soluciones
+
+.. image:: ../_static/solutions-01.png
+  :width: 300
+  :alt: Soluciones
+
+5. Integraciones
+
+Otros flujos para dar salida a los resultados obtenidos hacia la plataforma del cliente.
+
+.. image:: ../_static/integrations.png
+  :width: 400
+  :alt: Integraciones
 
 *CARTO* cuenta con la posibilidad de importar datos desde diversas fuentes de datos, pero carece de soporte nativo para conectar a muchos de estos sistemas de almacenamiento Big Data usados generalmente para almacenar datos operacionales o secuencias de datos temporales.
 
@@ -43,7 +92,9 @@ Objetivo
 
 El objetivo de este trabajo final de máster, está centrado en la primera fase del flujo de trabajo descrito previamente la ingestión de datos. Más concretamente, consiste en el desarrollo de conectores para *CARTO* que permitan incluir en los cuadros de mandos (:ref:`dashboard`), información proveniente de los siguientes sistemas de almacenamiento y/o procesamiento Big Data.
 
-![](../_static/flujo01.png)
+.. image:: ../_static/flujo01.png
+  :width: 800
+  :alt: Ingestión de datos
 
 El objetivo es encontrar un mecanismo fácilmente reproducible que permita en el futuro integrar otros sistemas de almacenamiento. Para el actual trabajo, el objetivo consiste en integrar al menos:
 
